@@ -77,12 +77,15 @@ WSGI_APPLICATION = 'unbrokeme.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'cis5800',
-		'user': 'cis5800',
-		'Password': 'cis5800',
-		'Host': '127.0.0.1',
-		'Port': '5432', 
+		'USER': 'cis5800',
+		'PASSWORD': 'cis5800',
+        'HOST': '',
+        'PORT': '',
+        'OPTIONS': {
+            'autocommit': True,
+        }
     }
 }
 

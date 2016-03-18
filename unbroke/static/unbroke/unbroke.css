@@ -1,0 +1,14 @@
+#userform {
+    margin: 0 auto;
+    font-family: Calibri, Consolas, Arial, sans-serif;
+    padding: 20% 40% 0% 40%;
+    width: 50%;
+    height: 50%;
+    
+}
+
+#ferror {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: red;
+}

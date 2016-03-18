@@ -1,22 +1,21 @@
-{{ % load staticfiles %}}
-<!doctype html>
-<html>
-<head>
+{% load staticfiles %}
 <title> Unbroke Me </title>
-</head>
-<body>
-	<div id="login">
-		<form id="loginform" action="" method="POST" >
-			<label for="utext">Username </label>
-			<input type="text" id="user" value="" placeholder="Enter your Username" required>
-			<label for="ptext">Password </label>
-			<input type="password" id="pword" value="" placeholder="Enter your Password" required>
-			<input type="submit" id="lbtn" value="Login">
-			<input type="submit" id="rbtn" value="Register">
-		
-		</form>
-	
-	</div>
+<link rel="stylesheet" type="text/css" href="{% static 'unbroke/unbroke.css' %}" />
+<script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
-</body>
-</html>
+	<div id="userform">
+		<form id="loginform" action="" method="POST" >
+            {% csrf_token %} 
+            <label id="ferror"></label></br>
+			<label for="uname">Username </label></br>
+			<input type="email" id="uname" value="" onfocusout="validate()" placeholder="Enter your Username" required></br>
+			<label for="pword">Password </label></br>
+			<input type="password" id="pword" value="" placeholder="Enter your Password" required></br></br>
+        	<input type="submit" id="lbtn" value="Login"></br>		
+		</form>
+        <form action="{% url 'unbroke:register' %}" method="POST">
+            {% csrf_token %} 
+            <label for "rbtn">Don't have an Account?</label>
+            <input type="submit" id="rbtn" value="Register"></br>
+        </form>
+	</div>

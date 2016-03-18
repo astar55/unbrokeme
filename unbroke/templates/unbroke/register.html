@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'unbroke/unbroke.css' %}" />
+<script src="{% static 'unbroke/unbroke.js' %}"> </script>
+
+<div id="userform">
+	<form id="regform" action="" method="Post">
+        {% csrf_token %} 
+        <label id="ferror"></label></br>
+		<label for "fname">First Name </label></br>
+		<input type="text" value="" id="fname" onfocusout="validate()" required></br>
+		<label for "lname">Last Name </label></br>
+		<input type="text" value="" id="lname" onfocusout="validate()" required></br>
+		<label for "uname">Email</label></br>
+		<input type="email" value="" id="uname" onfocusout="validate()" required></br>
+		<label for "pword">Password</label></br>
+		<input type="password" value="" id="pword" onfocusout="validate()" required></br></br>
+		<input type="submit" value="Register"></br>
+    </form>
+    <form action="{% url 'unbroke:index' %}" method="POST">
+        {% csrf_token %}
+        <label for "lbtn">Already have an Account?</label>
+        <input type="submit" value="Login"> 
+    </form>
+</div>
