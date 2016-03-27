@@ -11,6 +11,5 @@
 * Changed the Background Color
 * Updated the JS validation to include password field
 * Change the id of the username field and email field on the login and registration page
-* Separate the validation of the username field in login page and the email field
-  in the registration page
+* Separate the validation of the username field in login page and the email field in the registration page
 * Change the font color for the forms
