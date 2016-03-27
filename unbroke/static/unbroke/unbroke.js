@@ -27,4 +27,22 @@ function validate() {
             document.getElementById("ferror").innerHTML = "";
         }
         }
+    else if (event.target.id == "user"){
+        let x = document.getElementById("user");
+        if (!x.value.includes("@")){
+            document.getElementById("ferror").innerHTML = "Invalid Username";
+        }
+        else{
+            document.getElementById("ferror").innerHTML = "";
+        }
+        }
+    else if (event.target.id == "pword"){
+        let x = document.getElementById("pword");
+        if (x.value.length == 0 || x.value == ""){
+            document.getElementById("ferror").innerHTML = "Invalid Password";
+        }
+        else{
+            document.getElementById("ferror").innerHTML = "";
+        }
+        }
     }

@@ -7,10 +7,10 @@
 		<form id="loginform" action="" method="POST" >
             {% csrf_token %} 
             <label id="ferror"></label></br>
-			<label for="uname">Username </label></br>
-			<input type="email" id="uname" value="" onfocusout="validate()" placeholder="Enter your Username" required></br>
+			<label for="user">Username </label></br>
+			<input type="email" id="user" value="" onfocusout="validate()" placeholder="Enter your Username" required></br>
 			<label for="pword">Password </label></br>
-			<input type="password" id="pword" value="" placeholder="Enter your Password" required></br></br>
+			<input type="password" id="pword" value="" onfocusout="validate()" placeholder="Enter your Password" required></br></br>
         	<input type="submit" id="lbtn" value="Login"></br>		
 		</form>
         <form action="{% url 'unbroke:register' %}" method="POST">

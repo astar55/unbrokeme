@@ -4,11 +4,15 @@
     padding: 20% 40% 0% 40%;
     width: 50%;
     height: 50%;
-    
+    color: springgreen;
 }
 
 #ferror {
     font-weight: bold;
     font-size: 1.5em;
-    color: red;
+    color: peachpuff;
+}
+
+body {
+    background-color: seagreen;
 }
