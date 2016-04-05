@@ -17,4 +17,4 @@
 * 4/5/2016
 * * Updated the Settings file for SQLite Backend
 * * Ran Migrations
-* * Make Adjustments to the CSS layout for userform
+* * Made Adjustments to the CSS layout for userform
