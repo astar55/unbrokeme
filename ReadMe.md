@@ -13,8 +13,8 @@
 * * Change the id of the username field and email field on the login and registration page
 * * Separate the validation of the username field in login page and the email field in the registration page
 * * Change the font color for the forms
-*
+* 
 * 4/5/2016
 * * Updated the Settings file for SQLite Backend
-* * Made Migrations
+* * Ran Migrations
 * * Make Adjustments to the CSS layout for userform
