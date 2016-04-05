@@ -4,7 +4,7 @@
 <script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
 	<div id="userform">
-		<form id="loginform" action="" method="POST" >
+		<form id="loginform" action="{% url 'unbroke:home' %}" method="POST" >
             {% csrf_token %} 
             <label id="ferror"></label></br>
 			<label for="user">Username </label></br>

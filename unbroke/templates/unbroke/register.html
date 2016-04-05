@@ -1,9 +1,10 @@
 {% load staticfiles %}
+<title>Register</title>
 <link rel="stylesheet" type="text/css" href="{% static 'unbroke/unbroke.css' %}" />
 <script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
 <div id="userform">
-	<form id="regform" action="" method="Post">
+	<form id="regform" action="{% url 'unbroke:index' 'true' %}" method="Post">
         {% csrf_token %} 
         <label id="ferror"></label></br>
 		<label for "fname">First Name </label></br>

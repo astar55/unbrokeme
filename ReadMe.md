@@ -18,5 +18,7 @@
 * * Updated the Settings file for SQLite Backend
 * * Ran Migrations
 * * Made Adjustments to the CSS layout for userform
-*
-*
+* * Created Home Dashboard Template page
+* * Created Backend python file
+* * Added action data to forms
+* * 

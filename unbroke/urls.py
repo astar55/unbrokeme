@@ -6,4 +6,5 @@ app_name = 'unbroke'
 urlpatterns = [
 	url(r'^$', views.IndexView, name='index'),
     url(r'^register$', views.RegisterView, name='register'),
+    url(r'^home$', views.HomeView, name='home'),
 ]
