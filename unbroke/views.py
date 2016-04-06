@@ -9,9 +9,12 @@ from . import dbconnect
 def IndexView(request):
     return render(request, 'unbroke/index.html', {})
     
-def IndexView(request, registering):
-    if registering == "true":
-        pass
+def IndexView2(request):
+    regfn = request.POST['fname']
+    regln = request.POST['lname']
+    regun = request.POST['uname']
+    regpw = request.POST['pword']
+    dbconnect.insertdata(regfn, regln, regun, regpw)
     return render(request, 'unbroke/index.html', {})
     
 def RegisterView(request):
@@ -20,5 +23,8 @@ def RegisterView(request):
 def HomeView(request):
     loginuser = request.POST['user']
     loginpass = request.POST['pword']
-    
-    return render(request, 'unbroke/home.html', {})
+    if(dbconnect.loginvalid(loginuser, loginpass)):
+        return render(request, 'unbroke/home.html', {})
+    else:
+        messages.add_message(request, messages.INFO, "Invalid Username/Password")
+        return redirect(reverse('unbroke:index'))

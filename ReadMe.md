@@ -21,4 +21,5 @@
 * * Created Home Dashboard Template page
 * * Created Backend python file
 * * Added action data to forms
-* * 
+* * Finished the Data insertion from register page
+* * Finished Login validation 

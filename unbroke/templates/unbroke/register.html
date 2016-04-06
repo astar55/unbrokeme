@@ -4,17 +4,17 @@
 <script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
 <div id="userform">
-	<form id="regform" action="{% url 'unbroke:index' 'true' %}" method="Post">
+	<form id="regform" action="{% url 'unbroke:index2' %}" method="Post">
         {% csrf_token %} 
         <label id="ferror"></label></br>
 		<label for "fname">First Name </label></br>
-		<input type="text" value="" id="fname" onfocusout="validate()" required></br>
+		<input type="text" value="" name="fname" id="fname" onfocusout="validate()" required></br>
 		<label for "lname">Last Name </label></br>
-		<input type="text" value="" id="lname" onfocusout="validate()" required></br>
+		<input type="text" value="" name="lname" id="lname" onfocusout="validate()" required></br>
 		<label for "uname">Email</label></br>
-		<input type="email" value="" id="uname" onfocusout="validate()" required></br>
+		<input type="email" value="" name="uname" id="uname" onfocusout="validate()" required></br>
 		<label for "pword">Password</label></br>
-		<input type="password" value="" id="pword" onfocusout="validate()" required></br></br>
+		<input type="password" value="" name="pword" id="pword" onfocusout="validate()" required></br></br>
 		<input type="submit" value="Register"></br>
     </form>
     <form action="{% url 'unbroke:index' %}" method="POST">

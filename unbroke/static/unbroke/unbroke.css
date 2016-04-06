@@ -7,10 +7,11 @@
     color: springgreen;
 }
 
-#ferror {
+#ferror, #error {
     font-weight: bold;
     font-size: 1.5em;
     color: peachpuff;
+    margin: 0;
 }
 
 body {
