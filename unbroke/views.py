@@ -7,14 +7,12 @@ from . import dbconnect
 # Create your views here.
 
 def IndexView(request):
-    return render(request, 'unbroke/index.html', {})
-    
-def IndexView2(request):
-    regfn = request.POST['fname']
-    regln = request.POST['lname']
-    regun = request.POST['uname']
-    regpw = request.POST['pword']
-    dbconnect.insertdata(regfn, regln, regun, regpw)
+    if request.method == 'POST':
+        regfn = request.POST['fname']
+        regln = request.POST['lname']
+        regun = request.POST['uname']
+        regpw = request.POST['pword']
+        dbconnect.insertdata(regfn, regln, regun, regpw)
     return render(request, 'unbroke/index.html', {})
     
 def RegisterView(request):

@@ -18,7 +18,7 @@
 			<input type="password" name="pword" id="pword" value="" onfocusout="validate()" placeholder="Enter your Password" required></br></br>
         	<input type="submit" id="lbtn" value="Login"></br>		
 		</form>
-        <form action="{% url 'unbroke:register' %}" method="POST">
+        <form action="{% url 'unbroke:register' %}" method="GET">
             {% csrf_token %} 
             <label for "rbtn">Don't have an Account?</label>
             <input type="submit" id="rbtn" value="Register"></br>

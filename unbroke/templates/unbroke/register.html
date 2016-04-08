@@ -4,7 +4,7 @@
 <script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
 <div id="userform">
-	<form id="regform" action="{% url 'unbroke:index2' %}" method="Post">
+	<form id="regform" action="{% url 'unbroke:index' %}" method="Post">
         {% csrf_token %} 
         <label id="ferror"></label></br>
 		<label for "fname">First Name </label></br>
@@ -17,7 +17,7 @@
 		<input type="password" value="" name="pword" id="pword" onfocusout="validate()" required></br></br>
 		<input type="submit" value="Register"></br>
     </form>
-    <form action="{% url 'unbroke:index' %}" method="POST">
+    <form action="{% url 'unbroke:index' %}" method="GET">
         {% csrf_token %}
         <label for "lbtn">Already have an Account?</label>
         <input type="submit" value="Login"> 

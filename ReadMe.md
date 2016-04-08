@@ -23,3 +23,8 @@
 * * Added action data to forms
 * * Finished the Data insertion from register page
 * * Finished Login validation 
+*
+* 4/8/2016
+* * Deleted IndexView2
+* * Register View will redirect to IndexView
+* * Change form methods to Get for forms that do not send sensitive information 
