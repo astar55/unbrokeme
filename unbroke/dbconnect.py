@@ -23,6 +23,15 @@ def loginvalid(user, pasd):
                 valid = True
     return valid
     
+def getfname(user):
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    u = (user, )
+    query = c.execute('Select * from User where Username=?', u )
+    fname = ''
+    for row in query:
+        fname = row[0]
+    return fname
     
     
 def passhash(pasd):

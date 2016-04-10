@@ -28,3 +28,9 @@
 * * Deleted IndexView2
 * * Register View will redirect to IndexView
 * * Change form methods to Get for forms that do not send sensitive information 
+*
+* 4/10/2016
+* * Changed Session Engine to Cookies
+* * Tidy Up Login validation
+* * 
+

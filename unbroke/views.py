@@ -8,21 +8,26 @@ from . import dbconnect
 
 def IndexView(request):
     if request.method == 'POST':
-        regfn = request.POST['fname']
-        regln = request.POST['lname']
-        regun = request.POST['uname']
-        regpw = request.POST['pword']
-        dbconnect.insertdata(regfn, regln, regun, regpw)
+        if bool(request.POST) == True:
+            regfn = request.POST['fname']
+            regln = request.POST['lname']
+            regun = request.POST['uname']
+            regpw = request.POST['pword']
+            dbconnect.insertdata(regfn, regln, regun, regpw)
     return render(request, 'unbroke/index.html', {})
     
 def RegisterView(request):
     return render(request, 'unbroke/register.html', {})
     
 def HomeView(request):
-    loginuser = request.POST['user']
-    loginpass = request.POST['pword']
-    if(dbconnect.loginvalid(loginuser, loginpass)):
-        return render(request, 'unbroke/home.html', {})
+    if request.method == 'POST':
+        loginuser = request.POST['user']
+        loginpass = request.POST['pword']
+        if(dbconnect.loginvalid(loginuser, loginpass)):
+            return render(request, 'unbroke/home.html', {'name': dbconnect.getfname(loginuser), })
+        else:
+            messages.add_message(request, messages.INFO, "Invalid Username/Password")
+            return redirect(reverse('unbroke:index'))
     else:
-        messages.add_message(request, messages.INFO, "Invalid Username/Password")
         return redirect(reverse('unbroke:index'))
+  
