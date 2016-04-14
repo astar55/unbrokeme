@@ -13,7 +13,11 @@ def IndexView(request):
             regln = request.POST['lname']
             regun = request.POST['uname']
             regpw = request.POST['pword']
-            dbconnect.insertlogindata(regfn, regln, regun, regpw)
+            try:
+                dbconnect.insertlogindata(regfn, regln, regun, regpw)
+            except IntegrityError:
+                messages.add_message(request, messages.INFO, "Username already Taken")
+                return redirect(reverse('unbroke:index'))
     return render(request, 'unbroke/index.html', {})
     
 def RegisterView(request):

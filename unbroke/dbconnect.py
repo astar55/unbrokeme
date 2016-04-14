@@ -20,7 +20,7 @@ def loginvalid(user, pasd):
     query = c.execute('Select * from User where Username=?', u )
     if query.rowcount != 0:
         for row in query:
-            if pdigest == row[3]:
+            if pdigest == row[4]:
                 valid = True
     conn.close()
     return valid
@@ -32,7 +32,7 @@ def getfname(user):
     query = c.execute('Select * from User where Username=?', u )
     fname = ''
     for row in query:
-        fname = row[0]
+        fname = row[1]
     conn.close()
     return fname
     
