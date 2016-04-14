@@ -13,7 +13,7 @@ def IndexView(request):
             regln = request.POST['lname']
             regun = request.POST['uname']
             regpw = request.POST['pword']
-            dbconnect.insertdata(regfn, regln, regun, regpw)
+            dbconnect.insertlogindata(regfn, regln, regun, regpw)
     return render(request, 'unbroke/index.html', {})
     
 def RegisterView(request):

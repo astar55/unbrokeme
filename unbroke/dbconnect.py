@@ -1,12 +1,13 @@
-import sqlite3, hashlib, os
+import sqlite3, hashlib, os, random
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def insertdata(first, last, user, pasd):
+def insertlogindata(first, last, user, pasd):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     pdigest = passhash(pasd)
-    c.execute('INSERT INTO User VALUES (?, ?, ?, ?)', (first, last, user, pdigest))
+    id = str(random.random())
+    c.execute('INSERT INTO User VALUES (?, ?, ?, ?, ?)', (id[2:], first, last, user, pdigest))
     conn.commit()
     conn.close()
     
@@ -21,6 +22,7 @@ def loginvalid(user, pasd):
         for row in query:
             if pdigest == row[3]:
                 valid = True
+    conn.close()
     return valid
     
 def getfname(user):
@@ -31,6 +33,7 @@ def getfname(user):
     fname = ''
     for row in query:
         fname = row[0]
+    conn.close()
     return fname
     
     

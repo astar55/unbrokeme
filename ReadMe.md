@@ -32,5 +32,12 @@
 * 4/10/2016
 * * Changed Session Engine to Cookies
 * * Tidy Up Login validation
-* * 
+* 
+* 4/13/2016
+* * Added Expense Table in DB
+* * Edit Users Table in DB
+* * change insertdata method to insertlogindata
+* * remove csrf tokens for get method
+* * edit insert statement in insertlogindata method
+* 
 

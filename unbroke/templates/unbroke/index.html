@@ -19,7 +19,6 @@
         	<input type="submit" id="lbtn" value="Login"></br>		
 		</form>
         <form action="{% url 'unbroke:register' %}" method="GET">
-            {% csrf_token %} 
             <label for "rbtn">Don't have an Account?</label>
             <input type="submit" id="rbtn" value="Register"></br>
         </form>
