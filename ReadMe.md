@@ -42,5 +42,8 @@
 * 
 * 4/14/2016
 * * Redirect and alert user if username is already taken (Register page)
-
+*
+* 4/20/2016
+* * Added Logo to Login Page/Index Page
+* * Started Work on Dashboard
 

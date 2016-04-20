@@ -4,6 +4,7 @@
 <script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
 	<div id="userform">
+	<img src="{% static 'unbroke/logo.png' %}" alt="logo" width="100" height="auto" />
     {% if messages %}
 		{% for message in messages%}
 			<p id="error"> {{ message }} </p>

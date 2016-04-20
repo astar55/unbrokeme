@@ -1,10 +1,14 @@
 #userform {
     margin: 0;
     font-family: Calibri, Consolas, Arial, sans-serif;
-    padding: 20% 0% 0% 40%;
-    width: 50%;
-    height: 50%;
-    color: springgreen;
+    margin: 15% 0% 0% 40%;
+    padding-left: 5%;
+    width: 20%;
+    height: 30%;
+}
+
+#userform img {
+    padding: 0% 2em;
 }
 
 #ferror, #error {
@@ -15,5 +19,36 @@
 }
 
 body {
+    font-family: Yu Gothic, Calibri, Arial, sans-serif;
     background-color: seagreen;
+    color: springgreen;
+}
+
+
+#uinfo {
+    border-bottom: 2px solid palegreen;
+}
+
+#logoutbtn {
+    width: 5em;
+    height: auto;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.budgetdata {
+    float: left;
+    width: 30%;
+    height: auto;
+    text-align: center;
+    margin: 2% 5%;
+}
+
+#Deposits, #Expenses, #WishList, #Settings{
+    border: 2px solid aliceblue;
+}
+
+.budgetdata:hover{
+    background-color: snow;
+    color: aqua;
 }

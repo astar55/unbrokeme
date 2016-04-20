@@ -1,10 +1,30 @@
 {% load staticfiles %}
+{% load unbroke_extras %}
 <title>Register</title>
 <link rel="stylesheet" type="text/css" href="{% static 'unbroke/unbroke.css' %}" />
+
 <div id="uinfo">
     <h2> Welcome {{ name }} </h2>
-    
+    <form id="logout" action="{% url 'unbroke:logout' %}" method="POST" >
+        {% csrf_token %} 
+        <input id="logoutbtn" type="submit" value="Logout" />
+    </form>
 </div>
 <div id="uprofile">
-
+    <h3> Balance for the Month of &nbsp <input id="bdate" type="date" value={% getcurrentdate %}> </h3>
+    <div id="budget">
+        <h4> Your Balance for this Month is: <strong>{% comment %}Balance Location {% endcomment %}</strong></h4>
+        <div id="Deposits" class="budgetdata">
+            <h4> Deposits </h4>
+        </div>
+        <div id="Expenses" class="budgetdata">
+            <h4> Expenses </h4>
+        </div>
+        <div id="Wishlist" class="budgetdata">
+            <h4> WishList </h4>
+        </div>
+        <div id="Settings" class="budgetdata">
+            <h4> Settings </h4>
+        </div>
+    </div>
 </div>

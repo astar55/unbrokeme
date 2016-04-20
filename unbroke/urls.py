@@ -7,4 +7,5 @@ urlpatterns = [
 	url(r'^$', views.IndexView, name='index'),
     url(r'^register$', views.RegisterView, name='register'),
     url(r'^home$', views.HomeView, name='home'),
+    url(r'^logout$', views.LogoutView, name='logout'),
 ]

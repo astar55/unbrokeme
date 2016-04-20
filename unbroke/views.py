@@ -35,3 +35,9 @@ def HomeView(request):
     else:
         return redirect(reverse('unbroke:index'))
   
+def LogoutView(request):
+    if request.method == 'POST':
+        messages.add_message(request, messages.INFO, "You have Logged Out!")
+        return render(request, 'unbroke/index.html', {})
+    else:
+        return redirect(reverse('unbroke:index'))
