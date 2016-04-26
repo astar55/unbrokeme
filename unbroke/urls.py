@@ -8,4 +8,8 @@ urlpatterns = [
     url(r'^register/$', views.RegisterView, name='register'),
     url(r'^home/$', views.HomeView, name='home'),
     url(r'^logout/$', views.LogoutView, name='logout'),
+    url(r'^deposits/$', views.DepositsView, name='deposits'),
+    url(r'^expenses/$', views.ExpensesView, name='expenses'),
+    url(r'^wish/$', views.WishView, name='wish'),
+    url(r'^setting/$', views.SettingView, name='setting'),
 ]

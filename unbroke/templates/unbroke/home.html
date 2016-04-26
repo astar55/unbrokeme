@@ -14,17 +14,25 @@
     <h3> Balance for the Month of &nbsp <input id="bdate" type="date" value={% getcurrentdate %}> </h3>
     <div id="budget">
         <h4> Your Balance for this Month is: <strong>{% comment %}Balance Location {% endcomment %}</strong></h4>
-        <div id="Deposits" class="budgetdata">
-            <h4> Deposits </h4>
-        </div>
-        <div id="Expenses" class="budgetdata">
-            <h4> Expenses </h4>
-        </div>
-        <div id="Wishlist" class="budgetdata">
-            <h4> WishList </h4>
-        </div>
-        <div id="Settings" class="budgetdata">
-            <h4> Settings </h4>
-        </div>
+        <a class="dbtn" href="{% url 'unbroke:deposits' %}">
+            <div id="Deposits" class="budgetdata">
+                <h4> Deposits </h4>
+            </div>
+        </a>
+        <a class="dbtn" href="{% url 'unbroke:expenses' %}">
+            <div id="Expenses" class="budgetdata">
+                <h4> Expenses </h4>
+            </div>
+        </a>
+        <a class="dbtn" href="{% url 'unbroke:wish' %}">
+            <div id="Wishlist" class="budgetdata">
+                <h4> WishList </h4>
+            </div>
+        </a>
+        <a class="dbtn" href="{% url 'unbroke:setting' %}">
+            <div id="Settings" class="budgetdata">
+                <h4> Settings </h4>
+            </div>
+        </a>
     </div>
 </div>
