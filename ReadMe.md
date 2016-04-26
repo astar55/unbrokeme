@@ -46,4 +46,9 @@
 * 4/20/2016
 * * Added Logo to Login Page/Index Page
 * * Started Work on Dashboard
+*
+* 4/25/2016
+* * Used Session to store name and variable loggedin to direct user to home dashboard
+    if user has yet to log out
+* * Created Overlay class in css
 
