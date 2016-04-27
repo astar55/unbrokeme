@@ -46,3 +46,22 @@ function validate() {
         }
         }
     }
+
+function poverlay(){
+    document.getElementById("pc").style.width = "100%"
+}
+
+function cpoverlay(){
+    document.getElementById("pc").style.width = "0%"
+}
+
+function cpvalid(){
+    let x = document.getElementById("cnpass").value
+    let y = document.getElementById("npass").value
+    if (x == y && x.length > 0 && y.length > 0){
+        return true
+    }
+    document.getElementById("ferror").innerHTML = "Passwords Do Not Match!"
+    return false
+}
+

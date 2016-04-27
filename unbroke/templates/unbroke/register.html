@@ -4,6 +4,11 @@
 <script src="{% static 'unbroke/unbroke.js' %}"> </script>
 
 <div id="userform">
+	{% if messages %}
+		{% for message in messages %}
+			<p id="error"> {{ message }} </p>
+		{% endfor %}
+	{% endif %}
 	<form id="regform" action="{% url 'unbroke:index' %}" method="Post">
         {% csrf_token %} 
         <label id="ferror"></label></br>

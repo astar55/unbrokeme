@@ -1,3 +1,20 @@
 {% load staticfiles %}
 {% load unbroke_extras %}
 <title>Expenses</title>
+<link rel="stylesheet" type="text/css" href="{% static 'unbroke/unbroke.css' %}" />
+
+<div id="uinfo">
+    <h2> Welcome {{ name }} </h2>
+    <form id="logout" action="{% url 'unbroke:logout' %}" method="POST" >
+        {% csrf_token %} 
+        <input id="logoutbtn" type="submit" value="Logout" />
+    </form>
+</div>
+
+<nav>
+    <a href="{% url 'unbroke:home' %}">Home</a>&nbsp;
+    <a href="{% url 'unbroke:deposits' %}">Deposits</a>&nbsp;
+    <a href="{% url 'unbroke:expenses' %}">Expenses</a>&nbsp;
+    <a href="{% url 'unbroke:wish' %}">WishList</a>&nbsp;
+    <a href="{% url 'unbroke:setting' %}">Settings</a>&nbsp;
+</nav>

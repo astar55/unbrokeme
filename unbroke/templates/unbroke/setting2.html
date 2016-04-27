@@ -19,17 +19,17 @@
     <a href="{% url 'unbroke:wish' %}">WishList</a>&nbsp;
     <a href="{% url 'unbroke:setting' %}">Settings</a>&nbsp;
 </nav>
-<br>
-        {% if messages %}
-            {% for message in messages %}
-                <center> {{ message }} </center>
-            {% endfor %}
-        {% endif %}
 
-<div id="pc" class="overlay">
+
+<div id="pc" class="overlay2">
     <a class="closebtn" href="javascript:void(0)" onclick="cpoverlay()">&times;</a>
     <div class="overlay-content">
         <h3> Change Password </h3>
+        {% if messages %}
+            {% for message in messages %}
+                <p id="error"> {{ message }} </p><br>
+            {% endfor %}
+        {% endif %}
         <h4 id="ferror"></h4>
         <form id="pchangeform" action="{% url 'unbroke:setting' %}" onsubmit="cpvalid()" method="POST">
             {% csrf_token %} 

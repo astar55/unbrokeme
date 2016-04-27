@@ -10,6 +10,15 @@
         <input id="logoutbtn" type="submit" value="Logout" />
     </form>
 </div>
+
+<nav>
+    <a href="{% url 'unbroke:home' %}">Home</a>&nbsp;
+    <a href="{% url 'unbroke:deposits' %}">Deposits</a>&nbsp;
+    <a href="{% url 'unbroke:expenses' %}">Expenses</a>&nbsp;
+    <a href="{% url 'unbroke:wish' %}">WishList</a>&nbsp;
+    <a href="{% url 'unbroke:setting' %}">Settings</a>&nbsp;
+</nav>
+
 <div id="uprofile">
     <h3> Balance for the Month of &nbsp <input id="bdate" type="date" value={% getcurrentdate %}> </h3>
     <div id="budget">

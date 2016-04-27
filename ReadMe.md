@@ -51,4 +51,7 @@
 * * Used Session to store name and variable loggedin to direct user to home dashboard
     if user has yet to log out
 * * Created Overlay class in css
-
+*
+* 4/26/2016
+* * Added Navbar
+* * Completed Settings Page
