@@ -20,11 +20,6 @@
     <a href="{% url 'unbroke:wish' %}">WishList</a>&nbsp;
     <a href="{% url 'unbroke:setting' %}">Settings</a>&nbsp;
 </nav>
-{% if messages %}
-    {% for message in messages %}
-        <center> {{ message }} </center>
-    {% endfor %}
-{% endif %}
 <form class="datepicker" action="{% url 'unbroke:deposits' %}" method="POST">
     {% csrf_token %} 
     <h3> Balance for the Month of &nbsp <input name="bdate" id="bdate" type="date" value={{ date }}>&nbsp;<input type="submit" value="Submit"></h3>
@@ -119,6 +114,55 @@
     </div>
 </div>
     
+<div id="editol" class="overlay2">
+    <a class="closebtn" href="javascript:void(0)" onclick="hideeditOL()">&times;</a>
+    <div class="overlay-content">
+        <h3> Deposit  </h3>
+        <h4 id="ferror"></h4>
+        <form id="editd" action="{% url 'unbroke:deposits' %}" onsubmit="" method="POST">
+            {% csrf_token %}
+            <label for="eddate">Date</label> 
+            <input name="eddate" id="eddate" type="date" value={{ entry.0 }}>
+            <label for="eddesc">Description</label>
+            <select name="eddesc" id="eddesc" type="text" value={{ entry.1 }} required>
+                {% for desc in autodesc %}
+                <option value={{desc}}>{{desc}}</option>
+                {% endfor %}
+            </select>
+            <input type="button" id="adesc" onclick="showeadddesc()" value="Add">
+            <label for="edamt">Amount</label>
+            <input name="edamt" id="edamt" type="number" step="0.01" value={{ entry.2 }} required>
+            <label for="edacc">Account</label>
+            <select name="edacc" id="edacc" type="text" value={{ entry.3 }} required>
+                {% for acc in autoacc %}
+                <option value={{acc}}>{{acc}}</option>
+                {% endfor %}
+            </select>
+            <input type="button" id="eaacc" onclick="showeaddacc()" value="Add">
+            <!--<label for="erecurring">Recurring?</label>
+            <input name="erecurring" id="erecurring" type="checkbox" value="False" onchange="erecclick()">
+            <label for="erepeat" class="hidden">Repeat for</label>
+            <select name="erepeat" id="erepeat" class="hidden">
+                <option value="day">1 day</option>
+                <option value="week">1 week</option>
+                <option value="month">1 month</option>
+                <option value="semi">6 months</option>
+                <option value="year">1 year</option>
+            </select>!-->
+            <label for="enotes">Notes</label>
+            <textarea class="notes" name="enotes" value={{ entry.4 }}></textarea>
+            <input name="did" type="hidden" value={{ dID }}>
+            <input type="button" onclick="hideeditOL()" value="Cancel"> &nbsp;
+            <input type="submit" value="Save">
+        </form>
+        <form action="{% url 'unbroke:deposits' %}" method="POST">
+            {% csrf_token %}
+            <input name="ddelete" type="hidden" value={{ dID }}>
+            <input type="submit" value="Delete">
+        </form>
+    </div>      
+</div>
+
 <div id="addol" class="overlay">
     <a class="closebtn" href="javascript:void(0)" onclick="hideaddOL()">&times;</a>
     <div class="overlay-content">
@@ -183,6 +227,32 @@
         <form id="addacc" action="javascript:void(0)" onsubmit="addacc()">
             <input type="text" id="addititonalacc" value="">
             <input type="button" onclick="hideaddacc()" value="Cancel"> &nbsp;
+            <input type="submit" value="Save">
+        </form>
+    </div>      
+</div>
+
+<div id="eadddescol" class="overlayI">
+    <a class="closebtn" href="javascript:void(0)" onclick="hideeadddesc()">&times;</a>
+    <div class="overlay-content">
+        <h3> Add Description  </h3>
+        <h4 id="ferror"></h4>
+        <form id="eadddesc" action="javascript:void(0)" onsubmit="eadddesc()">
+            <input type="text" id="eaddititonaldesc" value="">
+            <input type="button" onclick="hideeadddesc()" value="Cancel"> &nbsp;
+            <input type="submit" value="Save">
+        </form>
+    </div>      
+</div>
+
+<div id="eaddaccol" class="overlayI">
+    <a class="closebtn" href="javascript:void(0)" onclick="hideeaddacc()">&times;</a>
+    <div class="overlay-content">
+        <h3> Add Account  </h3>
+        <h4 id="ferror"></h4>
+        <form id="eaddacc" action="javascript:void(0)" onsubmit="eaddacc()">
+            <input type="text" id="eaddititonalacc" value="">
+            <input type="button" onclick="hideeaddacc()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>
     </div>      

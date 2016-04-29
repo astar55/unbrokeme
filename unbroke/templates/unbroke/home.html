@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load unbroke_extras %}
-<title>Register</title>
+<title>Home</title>
 <link rel="stylesheet" type="text/css" href="{% static 'unbroke/unbroke.css' %}" />
 
 <div id="uinfo">
@@ -20,17 +20,22 @@
 </nav>
 
 <div id="uprofile">
-    <h3> Balance for the Month of &nbsp <input id="bdate" type="date" value={% getcurrentdate %}> </h3>
+    <form class="datepicker" action="{% url 'unbroke:home' %}" method="POST">
+        {% csrf_token %} 
+        <h3> Balance for the Month of &nbsp <input name="bdate" id="bdate" type="date" value={{ date }}>&nbsp;<input type="submit" value="Submit"></h3>
+    </form>
     <div id="budget">
-        <h4> Your Balance for this Month is: <strong>{% comment %}Balance Location {% endcomment %}</strong></h4>
+        <h4> Your Balance for this Month is: <strong>{{ balance }}</strong></h4>
         <a class="dbtn" href="{% url 'unbroke:deposits' %}">
             <div id="Deposits" class="budgetdata">
                 <h4> Deposits </h4>
+                <strong>{{ deposits }}</strong>
             </div>
         </a>
         <a class="dbtn" href="{% url 'unbroke:expenses' %}">
             <div id="Expenses" class="budgetdata">
                 <h4> Expenses </h4>
+                <strong>{{ expenses}}</strong>
             </div>
         </a>
         <a class="dbtn" href="{% url 'unbroke:wish' %}">

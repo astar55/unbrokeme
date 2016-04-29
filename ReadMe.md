@@ -55,3 +55,6 @@
 * 4/26/2016
 * * Added Navbar
 * * Completed Settings Page
+*
+* 4/28/2016
+* * Completed Wishlist, Expenses, Deposits Page

@@ -65,3 +65,136 @@ function cpvalid(){
     return false
 }
 
+function showDateOL(){
+    document.getElementById("dateol").style.width = "100%"
+}
+
+function hideDateOL(){
+    document.getElementById("dateol").style.width = "0%"
+}
+
+function showDescOL(){
+    document.getElementById("descol").style.width = "100%"
+}
+
+function hideDescOL(){
+    document.getElementById("descol").style.width = "0%"    
+}
+
+function showAmtOL(){
+    document.getElementById("amtol").style.width = "100%"    
+}
+
+function hideAmtOL(){
+    document.getElementById("amtol").style.width = "0%"    
+}
+
+function showAccOL(){
+    document.getElementById("accol").style.width = "100%"    
+}
+
+function hideAccOL(){
+    document.getElementById("accol").style.width = "0%"    
+}
+
+function hideeditOL(){
+    document.getElementById("editol").style.width = "0%"
+}
+
+function showaddOL(){
+    document.getElementById("addol").style.width = "100%"    
+}
+
+function hideaddOL(){
+    document.getElementById("addol").style.width = "0%"    
+}
+
+function recclick(){
+    if (document.getElementById('recurring').checked == true) {
+        document.getElementsByClassName('hidden').style.visibility = visible
+        document.getElementsById('recurring').value = "True"
+    }
+    else{
+        document.getElementsByClassName('hidden').style.visibility = hidden
+        document.getElementById('recurring').value = "False"
+    }
+}
+
+function erecclick(){
+    if (document.getElementById('erecurring').checked == true) {
+        document.getElementsByClassName('hidden').style.visibility = visible
+        document.getElementsById('erecurring').value = "True"
+    }
+    else{
+        document.getElementsByClassName('hidden').style.visibility = hidden
+        document.getElementById('erecurring').value = "False"
+    }
+}
+
+function showadddesc (){
+    document.getElementById("adddescol").style.width = "100%"    
+}
+
+function hideadddesc(){
+    document.getElementById("adddescol").style.width = "0%"    
+}
+
+function showaddacc (){
+    document.getElementById("addaccol").style.width = "100%"    
+}
+
+function hideaddacc(){
+    document.getElementById("addaccol").style.width = "0%"    
+}
+
+function adddesc(){
+    var x = document.getElementById("additionaldesc").value;
+    var y = document.getElementById("ddesc")
+    var z = document.createElement("option")
+    z.text = x
+    z.value = x
+    y.add(z)
+}
+
+function addacc(){
+    var x = document.getElementById("additionalacc").value;
+    var y = document.getElementById("dacc")
+    var z = document.createElement("option")
+    z.text = x
+    z.value = x
+    y.add(z)
+}
+
+function showeadddesc (){
+    document.getElementById("eadddescol").style.width = "100%"    
+}
+
+function hideeadddesc(){
+    document.getElementById("eadddescol").style.width = "0%"    
+}
+
+function showeaddacc (){
+    document.getElementById("eaddaccol").style.width = "100%"    
+}
+
+function hideeaddacc(){
+    document.getElementById("eaddaccol").style.width = "0%"    
+}
+
+function eadddesc(){
+    var x = document.getElementById("eadditionaldesc").value;
+    var y = document.getElementById("eddesc")
+    var z = document.createElement("option")
+    z.text = x
+    z.value = x
+    y.add(z)
+}
+
+function eaddacc(){
+    var x = document.getElementById("eadditionalacc").value;
+    var y = document.getElementById("edacc")
+    var z = document.createElement("option")
+    z.text = x
+    z.value = x
+    y.add(z)
+}

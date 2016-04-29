@@ -75,7 +75,18 @@ body {
     background-color: gray;
 }
 
-.overlay a, .overlay2 a {
+.overlayI {
+    position: fixed;
+    width: 0;
+    height: 50%;
+    z-index: 2;
+    left: 0;
+    top: 15%;
+    overflow-x: hidden;
+    background-color: gray;
+}
+
+.overlay a, .overlay2 a, overlayI a {
     position: absolute;
     top: 8%;
     right: 25%;
@@ -125,4 +136,30 @@ nav a:hover {
     position: absolute;
     top: 20%;
     left: 45%;
+}
+
+.data {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.data th {
+    width: 20%
+}
+
+.data th div:hover {
+    background-color: snow;
+}
+
+.addnew {
+    float:right;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.notes {
+    overflow-x: hidden;
+    overflow-y: auto;
 }

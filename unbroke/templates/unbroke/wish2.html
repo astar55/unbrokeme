@@ -21,11 +21,6 @@
     <a href="{% url 'unbroke:setting' %}">Settings</a>&nbsp;
 </nav>
 
-{% if messages %}
-    {% for message in messages %}
-        <center> {{ message }} </center>
-    {% endfor %}
-{% endif %}
 <input type="button" onclick="showaddOL()" value="Add New Entry">
 <div class="data" id="wish">
     <table name="edata" id="edata">
@@ -62,14 +57,45 @@
         <form id="addd" action="{% url 'unbroke:wish' %}" onsubmit="" method="POST">
             {% csrf_token %}
             <label for="dwish">Wish</label>
-            <input name="dwish" id="dwish" type="text" value="">
+            <input name="dwish" id="dwish" type="text" value="" required>
             <label for="damt">Amount</label>
-            <input name="damt" id="damt" type="number" step="0.01" value="0.00">
+            <input name="damt" id="damt" type="number" step="0.01" value="" required>
             <label for="dsaved">Saved</label>
-            <input name="dsaved" id="dsaved" type="number" step="0.01" value="0.00">            
+            <input name="dsaved" id="dsaved" type="number" step="0.01" value="" required>            
             <input type="button" onclick="hideaddOL()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>
     </div>      
 </div>
 
+<div id="editol" class="overlay2">
+    <a class="closebtn" href="javascript:void(0)" onclick="hideeditOL()">&times;</a>
+    <div class="overlay-content">
+        <h3> Wish  </h3>
+        <h4 id="ferror"></h4>
+        {% if messages %}
+            {% for message in messages %}
+                <center> {{ message }} </center>
+            {% endfor %}
+        {% endif %}
+        <form id="editd" action="{% url 'unbroke:wish' %}" onsubmit="" method="POST">
+            {% csrf_token %}
+            <label for="edwish">Wish</label>
+            <input name="edwish" id="edwish" type="text" value={{ }} required>
+            <label for="edamt">Amount</label>
+            <input name="edamt" id="edamt" type="number" step="0.01" value={{ }} required>
+            <label for="edsaved">Saved</label>
+            <input name="edsaved" id="edsaved" type="text" value={{ }} readonly>
+            <label for="edsave">To Save</label>
+            <input name="edsave" id="edsave" type="number" step="0.01" value="0.00" required>  
+            <input name="wid" type="hidden" value={{ wID }}>
+            <input type="button" onclick="hideaddOL()" value="Cancel"> &nbsp;
+            <input type="submit" value="Save">
+        </form>
+        <form action="{% url 'unbroke:wish' %}" method="POST">
+            {% csrf_token %}
+            <input name="ddelete" type="hidden" value={{ wID }}>
+            <input type="submit" value="Delete">
+        </form>
+    </div>      
+</div>
