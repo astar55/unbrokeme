@@ -19,7 +19,7 @@
     <a href="{% url 'unbroke:expenses' %}">Expenses</a>&nbsp;
     <a href="{% url 'unbroke:wish' %}">WishList</a>&nbsp;
     <a href="{% url 'unbroke:setting' %}">Settings</a>&nbsp;
-</nav>
+</nav><br>
 
 {% if messages %}
     {% for message in messages %}
@@ -27,7 +27,7 @@
     {% endfor %}
 {% endif %}
 <input type="button" onclick="showaddOL()" value="Add New Entry">
-<div class="data" id="wish">
+<div class="data" id="wishlist">
     <table name="edata" id="edata">
         <tr>
             <th>Wish</th>
@@ -43,15 +43,15 @@
                 <td> $ {{ data.3 }} </td>
                 <td> {{ data.4 }} </td>
                 <td> <form name="editd" action="{% url 'unbroke:wish' %}" method="POST">
+                    {% csrf_token %} 
                     <input name="wID" type="hidden" value="{{ data.0 }}">
                     <input type="submit" value="Edit"></form></td>
             </tr>
         {% endfor %}   
     </table>
 </div><br>
-<input type="button" class="addnew" onclick="addd()" value="Add">
 <div class="totals" id="dtotal">
-    <h2>Your Total Savings this Month is : &nbsp;${{ total }}</h2>
+    <h2>Your Total Savings this Month is : &nbsp;${{ total.0.0 }}</h2>
 </div>
     
 <div id="addol" class="overlay">
@@ -61,12 +61,12 @@
         <h4 id="ferror"></h4>
         <form id="addd" action="{% url 'unbroke:wish' %}" onsubmit="" method="POST">
             {% csrf_token %}
-            <label for="dwish">Wish</label>
-            <input name="dwish" id="dwish" type="text" value="">
-            <label for="damt">Amount</label>
-            <input name="damt" id="damt" type="number" step="0.01" value="0.00">
-            <label for="dsaved">Saved</label>
-            <input name="dsaved" id="dsaved" type="number" step="0.01" value="0.00">            
+            <label for="dwish">Wish</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="dwish" id="dwish" type="text" value=""><br>
+            <label for="damt">Amount</label>&nbsp;
+            <input name="damt" id="damt" type="number" step="0.01" value="0.00"><br>
+            <label for="dsaved">Saved</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="dsaved" id="dsaved" type="number" step="0.01" value="0.00">  <br>          
             <input type="button" onclick="hideaddOL()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>

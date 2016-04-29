@@ -47,15 +47,15 @@
                 <td> $ {{ data.3 }} </td>
                 <td> {{ data.4 }} </td>
                 <td> <form name="editd" action="{% url 'unbroke:expenses' %}" method="POST">
+                        {% csrf_token %} 
                     <input name="eID" type="hidden" value="{{ data.0 }}">
                     <input type="submit" value="Edit"></form></td>
             </tr>
         {% endfor %}   
     </table>
 </div><br>
-<input type="button" class="addnew" onclick="addd()" value="Add">
 <div class="totals" id="dtotal">
-    <h2>Total: &nbsp;${{ total }}</h2>
+    <h2>Total: &nbsp;${{ total.0 }}</h2>
 </div>
 
 <div id="dateol" class="overlay">
@@ -128,25 +128,25 @@
         <form id="addd" action="{% url 'unbroke:expenses' %}" onsubmit="" method="POST">
             {% csrf_token %}
             <label for="ddate">Date</label> 
-            <input name="ddate" id="ddate" type="date" value="{% getcurrentdate %}" required>
+            <input name="ddate" id="ddate" type="date" value="{% getcurrentdate %}" required><br>
             <label for="ddesc">Description</label>
             <select name="ddesc" id="ddesc" type="text" value="" required>
                 {% for desc in autodesc %}
-                <option value={{desc}}>{{desc}}</option>
+                <option value={{desc.0}}>{{desc.0}}</option>
                 {% endfor %}
             </select>
-            <input type="button" id="adesc" onclick="showadddesc()" value="Add">
+            <input type="button" id="adesc" onclick="showadddesc()" value="Add"><br>
             <label for="damt">Amount</label>
-            <input name="damt" id="damt" type="number" step="0.01" value="" required>
+            <input name="damt" id="damt" type="number" step="0.01" value="" required><br>
             <label for="dacc">Account</label>
             <select name="dacc" id="dacc" type="text" value="" required>
                 {% for acc in autoacc %}
-                <option value={{acc}}>{{acc}}</option>
+                <option value={{acc.0}}>{{acc.0}}</option>
                 {% endfor %}
             </select>
-            <input type="button" id="aacc" onclick="showaddacc()" value="Add">
+            <input type="button" id="aacc" onclick="showaddacc()" value="Add"><br>
             <label for="recurring">Recurring?</label>
-            <input name="recurring" id="recurring" type="checkbox" value="False" onchange="recclick()">
+            <input name="recurring" id="recurring" type="checkbox" value="False" onchange="recclick()"><br>
             <label for="repeat" class="hidden">Repeat for</label>
             <select name="repeat" id="repeat" class="hidden">
                 <option value="day">1 day</option>
@@ -154,9 +154,9 @@
                 <option value="month">1 month</option>
                 <option value="semi">6 months</option>
                 <option value="year">1 year</option>
-            </select>
+            </select><br>
             <label for="anotes">Notes</label>
-            <textarea class="notes" name="anotes" value=""></textarea>
+            <textarea class="notes" name="anotes" value=""></textarea><br>
             <input type="button" onclick="hideaddOL()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>
@@ -169,7 +169,7 @@
         <h3> Add Description  </h3>
         <h4 id="ferror"></h4>
         <form id="adddesc" action="javascript:void(0)" onsubmit="adddesc()">
-            <input type="text" id="addititonaldesc" value="">
+            <input type="text" id="additionaldesc" value=""><br>
             <input type="button" onclick="hideadddesc()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>
@@ -182,7 +182,7 @@
         <h3> Add Account  </h3>
         <h4 id="ferror"></h4>
         <form id="addacc" action="javascript:void(0)" onsubmit="addacc()">
-            <input type="text" id="addititonalacc" value="">
+            <input type="text" id="additionalacc" value=""><br>
             <input type="button" onclick="hideaddacc()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>

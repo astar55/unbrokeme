@@ -62,15 +62,26 @@ def getbudget(user, year, month):
     budget = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    query = c.execute('Select SUM(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 7) = ? Group By Deposits.UserID;', (user, year, month))
-    for row in query:
-        budget.insert(1, row)
-    c = conn.cursor()
     query = c.execute('Select Savings from Savings Inner Join User ON Savings.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 7) = ? Group By Savings.UserID;', (user, year, month))
+     where Username = ? and substr(Date, 4) = ? and substr(Date, 1, 2) = ? Group By Savings.UserID;', (user, year, month))
     for row in query:
-        budget.insert(0, row)
+        budget.append(row)
+    if len(budget) == 0:
+        budget.append('0')
+    c = conn.cursor()
+    query = c.execute('Select total(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Group By Deposits.UserID;', (user, year, month))
+    for row in query:
+        budget.append(row)
+    while len(budget) < 2:
+        budget.append('0')
+    c = conn.cursor()
+    query = c.execute('Select total(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Group By Expenses.UserID;', (user, year, month))
+    for row in query:
+        budget.append(row)
+    while len(budget) < 3:
+        budget.append('0')
     conn.close()
     return budget
     
@@ -79,7 +90,7 @@ def getdeposits(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Date;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date;',
     (user, year, month))
     for row in query:
         d.append(row)
@@ -91,20 +102,19 @@ def getexpenses(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Date;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date;',
     (user, year, month))
     for row in query:
         e.append(row)
     conn.close()
     return e
 
-def getwishlist(user, year, month):
+def getwishlist(user):
     w = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Wishlist Inner Join User ON Wishlist.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Date;',
-    (user, year, month))
+     where Username = ?;', (user,))
     for row in query:
         w.append(row)
     conn.close()
@@ -115,7 +125,7 @@ def getdeposits2(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Date Desc;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date Desc;',
     (user, year, month))
     for row in query:
         d.append(row)
@@ -127,7 +137,7 @@ def getexpenses2(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Date Desc;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date Desc;',
     (user, year, month))
     for row in query:
         e.append(row)
@@ -138,7 +148,7 @@ def getdeposits3(user, year, month, desc):
     d = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    querystring = 'Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID where Username ='+user+' and substr(Date, 1, 2) ='+year+' and substr(Date, -4) ='+month
+    querystring = 'Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID where Username ='+user+' and substr(Date, 1, 4) ='+year+' and substr(Date, 6, 2) ='+month
     for descrip in desc:
         querystring += ' and Description ='
         querystring += descrip   
@@ -153,7 +163,7 @@ def getexpenses3(user, year, month, desc):
     e = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    querystring = 'Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID where Username ='+user+' and substr(Date, 1, 2) ='+year+' and substr(Date, -4) ='+month
+    querystring = 'Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID where Username ='+user+' and substr(Date, 1, 4) ='+year+' and substr(Date, 6, 2) ='+month
     for descrip in desc:
         querystring += ' and Description ='
         querystring += descrip   
@@ -169,7 +179,7 @@ def getdeposits4(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Amount;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount;',
     (user, year, month))
     for row in query:
         d.append(row)
@@ -181,7 +191,7 @@ def getexpenses4(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Amount;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount;',
     (user, year, month))
     for row in query:
         e.append(row)
@@ -193,7 +203,7 @@ def getdeposits5(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Amount Desc;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount Desc;',
     (user, year, month))
     for row in query:
         d.append(row)
@@ -205,7 +215,7 @@ def getexpenses5(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? Order by Amount Desc;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount Desc;',
     (user, year, month))
     for row in query:
         e.append(row)
@@ -217,7 +227,7 @@ def getdeposits6(user, year, month, desc):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     querystring = 'Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username ='+user+' and substr(Date, 1, 2) ='+year+' and substr(Date, -4) ='+month
+     where Username ='+user+' and substr(Date, 1, 4) ='+year+' and substr(Date, 6, 2) ='+month
     for descrip in desc:
         querystring += ' and Description ='
         querystring += descrip   
@@ -233,7 +243,7 @@ def getexpensess6(user, year, month, desc):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     querystring = 'Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username ='+user+' and substr(Date, 1, 2) ='+year+' and substr(Date, -4) ='+month
+     where Username ='+user+' and substr(Date, 1, 4) ='+year+' and substr(Date, 6, 2) ='+month
     for descrip in desc:
         querystring += ' and Description ='
         querystring += descrip   
@@ -249,7 +259,7 @@ def getddescs(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select distinct Description from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
         d.append(row)
@@ -261,7 +271,7 @@ def getedescs(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select distinct Description from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
         e.append(row)
@@ -273,7 +283,7 @@ def getdaccs(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select distinct Account from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
         d.append(row)
@@ -285,7 +295,7 @@ def geteaccs(user, year, month):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select distinct Account from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
         e.append(row)
@@ -293,42 +303,63 @@ def geteaccs(user, year, month):
     return e
 
 def getdtotal(user, year, month):
+    total = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    query = c.execute('Select Sum(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+    query = c.execute('Select total(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
-        total = row
+        total.append(row)
     conn.close()
-    if total[0] == None:
-        total = 0
-    return total
+    return total[0]
+
+def getdtotal2(userID, year, month):
+    total = []
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    query = c.execute('Select total(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+     where Deposits.UserID = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
+    (userID, year, month))
+    for row in query:
+        total.append(row)
+    conn.close()
+    return total[0]
     
 def getetotal(user, year, month):
+    total = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    query = c.execute('Select Sum(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+    query = c.execute('Select total(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+     where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
-        total = row
+        total.append(row)
     conn.close()
-    if total[0] == None:
-        total = 0
-    return total
+    return total[0]
+
+def getetotal2(userID, year, month):
+    total = []
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    query = c.execute('Select total(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+     where Expenses.UserID = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
+    (userID, year, month))
+    for row in query:
+        total.append(row)
+    conn.close()
+    return total[0]
     
 def getsavings(user, year, month):
+    total = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select Savings from Savings Inner Join User ON Savings.UserID= User.UserID\
-     where Username = ? and substr(Date, 1, 2) = ? and substr(Date, -4) = ? ;',
+     where Username = ? and substr(Date, 4) = ? and substr(Date, 1, 2) = ? ;',
     (user, year, month))
     for row in query:
-        total = row
+        total.append(row)
     conn.close()
-    if total[0] == None:
-        total = 0
     return total
     
 def getautoddesc():
@@ -375,13 +406,14 @@ def insertdeposit(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     user = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from Users where Username = ?', user)
+    query = c.execute('Select UserID from User where Username = ?', user)
     for row in query:
         UserId = row  
     c = conn.cursor()
     id = str(random.random())
     c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-    (id[2:], values[1], values[2], values[3], values[4], UserId, values[5]))
+    (id[2:], values[1], values[2], values[3], values[4], UserId[0], values[5]))
+    conn.commit()
     upsertsavings(values, UserId)
     conn.commit()
     conn.close()
@@ -390,13 +422,14 @@ def insertexpense(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     user = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from Users where Username = ?', user)
+    query = c.execute('Select UserID from User where Username = ?', user)
     for row in query:
         UserId = row  
     c = conn.cursor()
     id = str(random.random())
     c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-    (id[2:], values[1], values[2], values[3], values[4], UserId, values[5]))
+    (id[2:], values[1], values[2], values[3], values[4], UserId[0], values[5]))
+    conn.commit()
     upsertsavings(values, UserId)
     conn.commit()
     conn.close()
@@ -405,14 +438,14 @@ def insertwish(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     user = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from Users where Username = ?', user)
+    query = c.execute('Select UserID from User where Username = ?', user)
     for row in query:
-        UserId = row  
+        UserId = row
     c = conn.cursor()
     id = str(random.random())
     remaining = float(values[2])-float(values[3])
     c.execute('INSERT INTO Wishlist VALUES (?, ?, ?, ?, ?, ?);',
-    (id[2:], values[1], values[2], values[3], remaining , UserId))
+    (id[2:], values[1], values[2], values[3], remaining , UserId[0]))
     conn.commit()
     conn.close()
 
@@ -420,59 +453,65 @@ def insertdeposit2(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     values[0] = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from Users where Username = ?', values[0])
+    query = c.execute('Select UserID from User where Username = ?', values[0])
     for row in query:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
-    repeat = timedelta(day=1);
+    repeat = timedelta(1);
     c = conn.cursor()
     id = str(random.random())
     c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-    (id[2:], date, values[2], values[3], values[4], UserId, values[5]))
+    (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))
+    conn.commit()
     upsertsavings(values, UserId)            
     if values[6] == "day":
         id = str(random.random())
         date = date + repeat
         c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-        (id[2:], date, values[2], values[3], values[4], UserId, values[5]))
+        (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))
         datestr = date.isoformat()
         values[1] = datestr
+        conn.commit()
         upsertsavings(values, UserId)        
     elif values[6] == "week":
         for i in range(1,7):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))       
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))       
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     elif values[6] == "month":
         for i in range(1, 30):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))   
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))   
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     elif values[6] == "semi":
         for i in range(1, 365//2):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))   
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))   
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     elif values[6] == "year":
         for i in range(1, 365):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Deposits VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))   
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))   
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     conn.commit()
     conn.close()
@@ -481,166 +520,255 @@ def insertexpense2(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     values[0] = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from Users where Username = ?', values[0])
+    query = c.execute('Select UserID from User where Username = ?', values[0])
     for row in query:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
-    repeat = timedelta(day=1);
+    repeat = timedelta(1);
     c = conn.cursor()
     id = str(random.random())
     c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-    (id[2:], date, values[2], values[3], values[4], UserId, values[5]))
+    (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))
+    conn.commit()
     upsertsavings(values, UserId)            
     if values[6] == "day":
         id = str(random.random())
         date = date + repeat
         c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-        (id[2:], date, values[2], values[3], values[4], UserId, values[5]))
+        (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))
         datestr = date.isoformat()
         values[1] = datestr
+        conn.commit()
         upsertsavings(values, UserId)        
     elif values[6] == "week":
         for i in range(1,7):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))       
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))       
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     elif values[6] == "month":
         for i in range(1, 30):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))   
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))   
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     elif values[6] == "semi":
         for i in range(1, 365//2):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))   
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))   
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     elif values[6] == "year":
         for i in range(1, 365):
             id = str(random.random())
             date = date + repeat
             c.execute('INSERT INTO Expenses VALUES (?, ?, ?, ?, ?, ?, ?);',
-            (id[2:], date, values[2], values[3], values[4], UserId, values[5]))   
+            (id[2:], date, values[2], values[3], values[4], UserId[0], values[5]))   
             datestr = date.isoformat()
             values[1] = datestr
+            conn.commit()
             upsertsavings(values, UserId)        
     conn.commit()
     conn.close()
    
-def upsertsavings(values, UserId):
+def upsertsavings2(values, UserId):
+    SavingsId = [None, ]
     year = values[1][:4]
     month = values[1][5:7]
     date = month+'/'+year
-    c.execute("Select SavingsID from Savings where UserID = ? and Date=?", (UserId, date))
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    query = c.execute("Select SavingsID from Savings where UserID = ? and Date=?", (UserId[0], date))
     for row in query:
         SavingsId = row
-    if SavingsID == None:
+    if SavingsId[0] == None:
+        id = str(random.random())
+        dtotal = getdtotal(values[6], year, month)
+        etotal = getetotal(values[6], year, month)
+        savings = float(dtotal[0])-float(etotal[0])
+        c.execute('Insert Into Savings Values(?, ?, ?, ?, ?, ?)', 
+        (id[2:], date, dtotal[0], etotal[0], savings , UserId[0] ))
+        conn.commit()
+    else:
+        dtotal = getdtotal(values[6], year, month)
+        etotal = getetotal(values[6], year, month)
+        savings = float(dtotal[0])-float(etotal[0])
+        c.execute('Update Savings Set Deposit = ?, Expense = ?, Savings= ? where\
+        SavingsID = ? and Date= ? and UserID= ?', 
+        (dtotal[0], etotal[0], savings, SavingsId[0], date, UserId[0]))
+        conn.commit()
+    conn.close()
+
+def upsertsavings(values, UserId):
+    SavingsId = [None, ]
+    year = values[1][:4]
+    month = values[1][5:7]
+    date = month+'/'+year
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    query = c.execute("Select SavingsID from Savings where UserID = ? and Date=?", (UserId[0], date))
+    for row in query:
+        SavingsId = row
+    if SavingsId[0] == None:
         id = str(random.random())
         dtotal = getdtotal(values[0], year, month)
         etotal = getetotal(values[0], year, month)
-        savings = dtotal-etotal
+        savings = float(dtotal[0])-float(etotal[0])
         c.execute('Insert Into Savings Values(?, ?, ?, ?, ?, ?)', 
-        (id, date, dtotal, etotal, savings , UserId ))
+        (id[2:], date, dtotal[0], etotal[0], savings , UserId[0] ))
+        conn.commit()
     else:
         dtotal = getdtotal(values[0], year, month)
         etotal = getetotal(values[0], year, month)
-        savings = dtotal-etotal
-        c.execute('Insert Into Savings Values(?, ?, ?, ?, ?, ?)', 
-        (SavingsId, date, dtotal, etotal, savings, UserId ))
+        savings = float(dtotal[0])-float(etotal[0])
+        c.execute('Update Savings Set Deposit = ?, Expense = ?, Savings= ? where\
+        SavingsID = ? and Date= ? and UserID= ?', 
+        (dtotal[0], etotal[0], savings, SavingsId[0], date, UserId[0]))
+        conn.commit()
+    conn.close()
 
 def updatedeposit(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
+    UserId = getuserid(values[6])
     c.execute('Update Deposits SET Date = ?, Description = ?,\
     Amount = ?, Account = ?, Notes = ? where DepositID = ?;',
     (values[1], values[2], values[3], values[4], values[5], values[0]))
-    upsertsavings(values, UserId)
     conn.commit()
+    upsertsavings2(values, UserId)
     conn.close()
     
 def updateexpense(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
+    UserId = getuserid(values[6])
     c.execute('Update Expenses SET Date = ?, Description = ?,\
-    Amount = ?, Account = ?, Notes = ? where ExpenseID = ?;',
+    Amount = ?, Account = ?, Notes = ? where ExpensesID = ?;',
     (values[1], values[2], values[3], values[4], values[5], values[0]))
-    upsertsavings(values, UserId)
+    conn.commit()
+    upsertsavings2(values, UserId)
     conn.commit()
     conn.close()
     
 def updatewish(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    c.execute('Update Wish SET Wish = ?, Amount = ?,\
-    Saved = ?, Remaining = ?;',
-    (values[1], values[2], values[3], values[0]))
+    c.execute('Update Wishlist SET Wish = ?, Amount = ?,\
+    Saved = ?, Remaining = ? where WishlistID = ?;',
+    (values[1], values[2], float(values[3])+float(values[4]),
+     float(values[2])-(float(values[3])+float(values[4])), values[0]))
     conn.commit()
     conn.close()
     
 def getdepositsentry(Did):
+    entry = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Deposits where DepositID = ?;',
-    (Did))
+    (Did, ))
     for row in query:
-        entry = row
+        for i in row:
+            entry.append(i)
     conn.close()
     return entry[1], entry[2], entry[3], entry[4], entry[6]
 
 def getexpensesentry(Eid):
+    entry = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    query = c.execute('Select * from Expenses where ExpenseID = ?;',
-    (Eid))
+    id = (Eid,)
+    query = c.execute('Select * from Expenses where ExpensesID = ?;',
+    id)
     for row in query:
-        entry = row
+        for i in row:
+            entry.append(i)
     conn.close()
     return entry[1], entry[2], entry[3], entry[4], entry[6]
 
 def getwishentry(Wid):
+    entry = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Select * from Wishlist where WishlistID = ?;',
-    (Wid))
+    ((Wid,)))
     for row in query:
-        entry = row
+        for i in row:
+            entry.append(i)
     conn.close()
     return entry[1], entry[2], entry[3], entry[4]
 
 def deletedepositsentry(Did):
+    id = Did
+    values = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    query = c.execute('Select * from Deposits where DepositID = ?;',
+    (id,))
+    for row in query:
+        for i in row:
+            values.append(i)
     c = conn.cursor()
     query = c.execute('Delete from Deposits where DepositID = ?;',
-    (Did))
+    (Did,))
+    conn.commit()
+    c = conn.cursor()
+    dtotal = getdtotal2(values[5], values[1][:4], values[1][5:7])
+    etotal = getetotal2(values[5], values[1][:4], values[1][5:7])
+    savings = float(dtotal[0])-float(etotal[0])
+    date = values[1][5:7]+'/'+values[1][:4]
+    c.execute('Update Savings Set Deposit = ?, Expense = ?, Savings= ? where\
+    Date= ? and UserID= ?', (dtotal[0], etotal[0], savings, date, values[5]))
     conn.commit()
     conn.close()
-    return entry
 
 def deleteexpensesentry(Eid):
+    id = Eid
+    values = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
-    query = c.execute('Delete from Expenses where ExpenseID = ?;',
-    (Eid))
+    query = c.execute('Select * from Expenses where ExpensesID = ?;',
+    (id,))
+    for row in query:
+        for i in row:
+            values.append(i)
+    c = conn.cursor()
+    query = c.execute('Delete from Expenses where ExpensesID = ?;',
+    (Eid,))
+    conn.commit()
+    c = conn.cursor()
+    dtotal = getdtotal2(values[5], values[1][:4], values[1][5:7])
+    etotal = getetotal2(values[5], values[1][:4], values[1][5:7])
+    savings = float(dtotal[0])-float(etotal[0])
+    date = values[1][5:7]+'/'+values[1][:4]
+    c.execute('Update Savings Set Deposit = ?, Expense = ?, Savings= ? where\
+    Date= ? and UserID= ?', (dtotal[0], etotal[0], savings, date, values[5]))
     conn.commit()
     conn.close()
-    return entry
 
 def deletewishentry(Wid):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     query = c.execute('Delete from Wishlist where WishlistID = ?;',
-    (Wid))
+    (Wid,))
     conn.commit()
     conn.close()
-    return entry
+
+def getuserid(Username):
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    c = conn.cursor()
+    query = c.execute('Select UserID from User where Username = ?', (Username,))
+    for row in query:
+        UserId = row  
+    return UserId

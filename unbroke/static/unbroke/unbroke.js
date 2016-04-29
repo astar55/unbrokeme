@@ -111,22 +111,26 @@ function hideaddOL(){
 
 function recclick(){
     if (document.getElementById('recurring').checked == true) {
-        document.getElementsByClassName('hidden').style.visibility = visible
-        document.getElementsById('recurring').value = "True"
+        var x = document.getElementsByClassName('hidden')
+        x[0].style.visibility = "visible"
+        x[1].style.visibility = "visible"
+        document.getElementById('recurring').value = "True"
     }
     else{
-        document.getElementsByClassName('hidden').style.visibility = hidden
+        var x = document.getElementsByClassName('hidden')
+        x[0].style.visibility = "hidden"
+        x[1].style.visibility = "hidden"
         document.getElementById('recurring').value = "False"
     }
 }
 
 function erecclick(){
     if (document.getElementById('erecurring').checked == true) {
-        document.getElementsByClassName('hidden').style.visibility = visible
+        document.getElementsByClassName('hidden').style.visibility = "visible"
         document.getElementsById('erecurring').value = "True"
     }
     else{
-        document.getElementsByClassName('hidden').style.visibility = hidden
+        document.getElementsByClassName('hidden').style.visibility = "hidden"
         document.getElementById('erecurring').value = "False"
     }
 }
@@ -154,6 +158,7 @@ function adddesc(){
     z.text = x
     z.value = x
     y.add(z)
+    hideadddesc()
 }
 
 function addacc(){
@@ -163,6 +168,7 @@ function addacc(){
     z.text = x
     z.value = x
     y.add(z)
+    hideaddacc()
 }
 
 function showeadddesc (){
