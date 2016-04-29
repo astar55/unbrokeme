@@ -545,22 +545,26 @@ def upsertsavings(values, UserId):
     c.execute("Select SavingsID from Savings where UserID = ? and Date=?", (UserId, date))
     for row in query:
         SavingsId = row
-    if SavingsID = None:
+    if SavingsID == None:
         id = str(random.random())
+        dtotal = getdtotal(values[0], year, month)
+        etotal = getetotal(values[0], year, month)
+        savings = dtotal-etotal
         c.execute('Insert Into Savings Values(?, ?, ?, ?, ?, ?)', 
-        (id, date, dtotal = getdtotal(values[0], year, month), etotal = getetotal(values[0], year, month),
-        dtotal-etotal, UserId )
+        (id, date, dtotal, etotal, savings , UserId ))
     else:
+        dtotal = getdtotal(values[0], year, month)
+        etotal = getetotal(values[0], year, month)
+        savings = dtotal-etotal
         c.execute('Insert Into Savings Values(?, ?, ?, ?, ?, ?)', 
-        (SavingsId, date, dtotal = getdtotal(values[0], year, month), etotal = getetotal(values[0], year, month),
-        dtotal-etotal, UserId )
+        (SavingsId, date, dtotal, etotal, savings, UserId ))
 
 def updatedeposit(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     c.execute('Update Deposits SET Date = ?, Description = ?,\
     Amount = ?, Account = ?, Notes = ? where DepositID = ?;',
-    (values[1], values[2], values[3], values[4], values[5], values[0])
+    (values[1], values[2], values[3], values[4], values[5], values[0]))
     upsertsavings(values, UserId)
     conn.commit()
     conn.close()
@@ -570,7 +574,7 @@ def updateexpense(values):
     c = conn.cursor()
     c.execute('Update Expenses SET Date = ?, Description = ?,\
     Amount = ?, Account = ?, Notes = ? where ExpenseID = ?;',
-    (values[1], values[2], values[3], values[4], values[5], values[0])
+    (values[1], values[2], values[3], values[4], values[5], values[0]))
     upsertsavings(values, UserId)
     conn.commit()
     conn.close()
@@ -580,7 +584,7 @@ def updatewish(values):
     c = conn.cursor()
     c.execute('Update Wish SET Wish = ?, Amount = ?,\
     Saved = ?, Remaining = ?;',
-    (values[1], values[2], values[3], values[0])
+    (values[1], values[2], values[3], values[0]))
     conn.commit()
     conn.close()
     

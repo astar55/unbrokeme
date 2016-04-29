@@ -137,11 +137,11 @@ def DepositsView(request):
                     repeat = request.POST['repeat']
                     dbconnect.insertdeposit2([user, date, desc, amt, acc, note, repeat])
                     messages.add_message(request, messages.INFO, "Entry Inserted!")
-                return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getddescs(user, year, month),
-                'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
-                'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
-                'depositsdata': dbconnect.getdeposits(user, year, month)})
+                    return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getddescs(user, year, month),
+                    'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
+                    'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
+                    'depositsdata': dbconnect.getdeposits(user, year, month)})
                 elif request.POST["recurring"] == "False":
                     date = request.POST['ddate']
                     desc = request.POST['ddesc']
@@ -150,11 +150,11 @@ def DepositsView(request):
                     note = request.POST['anotes']
                     dbconnect.insertdeposit([user, date, desc, amt, acc, note])
                     messages.add_message(request, messages.INFO, "Entry Inserted!")
-                return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getddescs(user, year, month),
-                'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
-                'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
-                'depositsdata': dbconnect.getdeposits(user, year, month)})
+                    return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getddescs(user, year, month),
+                    'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
+                    'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
+                    'depositsdata': dbconnect.getdeposits(user, year, month)})
             elif 'eddate' in request.POST:
                 if request.POST["erecurring"] == "True":
                     date = request.POST['eddate']
@@ -165,11 +165,11 @@ def DepositsView(request):
                     dID = request.POST['did']                  
                     dbconnect.updatedeposit(dID, date, desc, amt, acc, note )
                     messages.add_message(request, messages.INFO, "Entry Updated!")
-                return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getddescs(user, year, month),
-                'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
-                'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
-                'depositsdata': dbconnect.getdeposits(user, year, month)})
+                    return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getddescs(user, year, month),
+                    'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
+                    'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
+                    'depositsdata': dbconnect.getdeposits(user, year, month)})
                 elif request.POST["erecurring"] == "False":
                     date = request.POST['eddate']
                     desc = request.POST['eddesc']
@@ -179,18 +179,18 @@ def DepositsView(request):
                     dID = request.POST['did']                  
                     dbconnect.updatedeposit(dID, date, desc, amt, acc, note )
                     messages.add_message(request, messages.INFO, "Entry Updated!")
-                return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getddescs(user, year, month),
-                'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
-                'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
-                'depositsdata': dbconnect.getdeposits(user, year, month)})           
+                    return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getddescs(user, year, month),
+                    'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
+                    'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
+                    'depositsdata': dbconnect.getdeposits(user, year, month)})           
             elif 'dID' in request.POST:
                 Did = request.POST['dID']
                 return render(request, 'unbroke/deposits2.html', {'name': request.session['name'],
                 'date': date, 'desc': dbconnect.getddescs(user, year, month),
                 'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
                 'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
-                'dID': Did, 'entry': dbconnect.getdepositsentry(Did)
+                'dID': Did, 'entry': dbconnect.getdepositsentry(Did),
                 'depositsdata': dbconnect.getdeposits(user, year, month)})           
             elif 'ddelete' in request.POST:
                 Did= request.POST['ddelete']
@@ -277,11 +277,11 @@ def ExpensesView(request):
                     repeat = request.POST['repeat']
                     dbconnect.insertexpense2([user, date, desc, amt, acc, note, repeat])
                     messages.add_message(request, messages.INFO, "Entry Inserted!")
-                return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getedescs(user, year, month),
-                'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
-                'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
-                'expensesdata': dbconnect.getexpenses(user, year, month)})
+                    return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getedescs(user, year, month),
+                    'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
+                    'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
+                    'expensesdata': dbconnect.getexpenses(user, year, month)})
                 elif request.POST["recurring"] == "False":
                     date = request.POST['ddate']
                     desc = request.POST['ddesc']
@@ -290,11 +290,11 @@ def ExpensesView(request):
                     note = request.POST['anotes']
                     dbconnect.insertexpense([user, date, desc, amt, acc, note])
                     messages.add_message(request, messages.INFO, "Entry Inserted!")
-                return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getedescs(user, year, month),
-                'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
-                'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
-                'expensesdata': dbconnect.getexpenses(user, year, month)})
+                    return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getedescs(user, year, month),
+                    'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
+                    'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
+                    'expensesdata': dbconnect.getexpenses(user, year, month)})
             elif 'eddate' in request.POST:
                 if request.POST["erecurring"] == "True":
                     date = request.POST['eddate']
@@ -305,11 +305,11 @@ def ExpensesView(request):
                     eID = request.POST['eid']                  
                     dbconnect.updateexpense(eID, date, desc, amt, acc, note )
                     messages.add_message(request, messages.INFO, "Entry Updated!")
-                return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getedescs(user, year, month),
-                'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
-                'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
-                'expensesdata': dbconnect.getexpenses(user, year, month)})
+                    return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getedescs(user, year, month),
+                    'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
+                    'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
+                    'expensesdata': dbconnect.getexpenses(user, year, month)})
                 elif request.POST["erecurring"] == "False":
                     date = request.POST['eddate']
                     desc = request.POST['eddesc']
@@ -319,18 +319,18 @@ def ExpensesView(request):
                     eID = request.POST['eid']                  
                     dbconnect.updateexpense(eID, date, desc, amt, acc, note )
                     messages.add_message(request, messages.INFO, "Entry Updated!")
-                return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
-                'date': date, 'desc': dbconnect.getedescs(user, year, month),
-                'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
-                'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
-                'expensesdata': dbconnect.getexpenses(user, year, month)})           
+                    return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
+                    'date': date, 'desc': dbconnect.getedescs(user, year, month),
+                    'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
+                    'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
+                    'expensesdata': dbconnect.getexpenses(user, year, month)})           
             elif 'eID' in request.POST:
                 Eid = request.POST['eID']
                 return render(request, 'unbroke/expenses2.html', {'name': request.session['name'],
                 'date': date, 'desc': dbconnect.getedescs(user, year, month),
                 'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
                 'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
-                'eID': Eid, 'entry': dbconnect.getexpensesentry(Eid)
+                'eID': Eid, 'entry': dbconnect.getexpensesentry(Eid),
                 'expensesdata': dbconnect.getexpenses(user, year, month)})           
             elif 'ddelete' in request.POST:
                 Eid= request.POST['edelete']
@@ -357,20 +357,20 @@ def WishView(request):
         if request.method == 'POST':
             if "wID" in request.POST:
                 WId = request.POST['wID']                
-            return render(request, 'unbroke/wish2.html', {'name': request.session['name'],
-            'date': date, 'total': dbconnect.getsavings(user, year, month),
-            'wID': WId, 'entry': dbconnect.getwishentry(WId),
-            'wishdata': dbconnect.getwishlist(user, year, month),})
+                return render(request, 'unbroke/wish2.html', {'name': request.session['name'],
+                'date': date, 'total': dbconnect.getsavings(user, year, month),
+                'wID': WId, 'entry': dbconnect.getwishentry(WId),
+                'wishdata': dbconnect.getwishlist(user, year, month),})
             elif "dwish" in request.POST:
                 wish = request.POST['dwish']
                 amt = request.POST['damt']
                 saved = request.POST['dsaved']
                 dbconnect.insertwish(user, wish, amt, saved)
                 messages.add_message(request, messages.INFO, "Entry Inserted!")
-            return render(request, 'unbroke/wish.html', {'name': request.session['name'],
-            'date': date, 'total': dbconnect.getsavings(user, year, month),
-            'wID': WId, 'entry': dbconnect.getwishentry(WId),
-            'wishdata': dbconnect.getwishlist(user, year, month),})
+                return render(request, 'unbroke/wish.html', {'name': request.session['name'],
+                'date': date, 'total': dbconnect.getsavings(user, year, month),
+                'wID': WId, 'entry': dbconnect.getwishentry(WId),
+                'wishdata': dbconnect.getwishlist(user, year, month),})
             elif 'edwish' in request.POST:
                 wish = request.POST['edwish']
                 amt = request.POST['edamt']
@@ -379,24 +379,24 @@ def WishView(request):
                 wID = request.POST['wid']
                 if float(save) < (0-float(saved)):
                     messages.add_message(request, messages.INFO, "Amount to Save cannot exceed Saved Amount!")
-                return render(request, 'unbroke/wish2.html', {'name': request.session['name'],
-                'date': date, 'total': dbconnect.getsavings(user, year, month),
-                'wID': WId, 'entry': dbconnect.getwishentry(WId),
-                'wishdata': dbconnect.getwishlist(user, year, month),})
+                    return render(request, 'unbroke/wish2.html', {'name': request.session['name'],
+                    'date': date, 'total': dbconnect.getsavings(user, year, month),
+                    'wID': WId, 'entry': dbconnect.getwishentry(WId),
+                    'wishdata': dbconnect.getwishlist(user, year, month),})
                 else:
                     saving = float(saved) + float(save)
                     dbconnect.updatewish([wID, wish, amt, saving])
                     messages.add_message(request, messages.INFO, "Entry Updated!")
-                return render(request, 'unbroke/wish.html', {'name': request.session['name'],
-                'date': date, 'total': dbconnect.getsavings(user, year, month),
-                'wishdata': dbconnect.getwishlist(user, year, month),})
+                    return render(request, 'unbroke/wish.html', {'name': request.session['name'],
+                    'date': date, 'total': dbconnect.getsavings(user, year, month),
+                    'wishdata': dbconnect.getwishlist(user, year, month),})
             elif 'ddelete' in request.POST:
                 wID = request.POST['ddelete']
                 dbconnect.deletewishentry(wID)
                 messages.add_message(request, messages.INFO, "Entry Deleted!")
-            return render(request, 'unbroke/wish.html', {'name': request.session['name'],
-            'date': date, 'total': dbconnect.getsavings(user, year, month),
-            'wishdata': dbconnect.getwishlist(user, year, month),})
+                return render(request, 'unbroke/wish.html', {'name': request.session['name'],
+                'date': date, 'total': dbconnect.getsavings(user, year, month),
+                'wishdata': dbconnect.getwishlist(user, year, month),})
         return render(request, 'unbroke/wish.html', {'name': request.session['name'],
         'date': date, 'total': dbconnect.getsavings(user, year, month),
         'wishdata': dbconnect.getwishlist(user, year, month),})
