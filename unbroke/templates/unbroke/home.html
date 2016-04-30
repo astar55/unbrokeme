@@ -25,7 +25,7 @@
         <h3> Balance for the Month of &nbsp <input name="bdate" id="bdate" type="date" value={{ date }}>&nbsp;<input type="submit" value="Submit"></h3>
     </form>
     <div id="budget">
-        <h4> Your Balance for this Month is: <strong>${{ balance.0 }}</strong></h4>
+        <h3> Your Balance for this Month is: <strong>${{ balance.0 }}</strong></h3>
         <a class="dbtn" href="{% url 'unbroke:deposits' %}">
             <div id="Deposits" class="budgetdata">
                 <h4> Deposits<br><strong>${{ deposits.0 }}</strong></h4>                
