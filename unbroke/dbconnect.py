@@ -451,9 +451,9 @@ def insertwish(values):
 
 def insertdeposit2(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
-    values[0] = (values[0], )
+    uname = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', values[0])
+    query = c.execute('Select UserID from User where Username = ?', uname)
     for row in query:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
@@ -518,9 +518,9 @@ def insertdeposit2(values):
  
 def insertexpense2(values):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
-    values[0] = (values[0], )
+    uname = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', values[0])
+    query = c.execute('Select UserID from User where Username = ?', uname)
     for row in query:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
