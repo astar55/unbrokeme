@@ -16,4 +16,4 @@ def getbudmonth():
 @register.simple_tag
 def getcurrentdate():
     today = date.today()
-    return ("%d-%02d-%d" % ((today.year), (today.month), (today.day)))
+    return ("%d-%02d-%02d" % ((today.year), (today.month), (today.day)))
