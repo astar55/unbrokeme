@@ -24,7 +24,7 @@ def loginvalid(user, pasd):
     c = conn.cursor()
     u = (user, )
     pdigest = passhash(pasd)
-    query = c.execute('Select * from User where Upper(Username)=Upper(?);', u )
+    query = c.execute('Select * from User where Username=?;', u )
     if query.rowcount != 0:
         for row in query:
             if pdigest == row[4]:
@@ -36,7 +36,7 @@ def getfname(user):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     u = (user, )
-    query = c.execute('Select * from User where Upper(Username)=Upper(?);', u )
+    query = c.execute('Select * from User where Username=?;', u )
     fname = ''
     for row in query:
         fname = row[1]
