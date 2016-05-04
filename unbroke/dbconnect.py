@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def getcurrentdate():
     today = date.today()
-    return ("%d-%02d-%d" % ((today.year), (today.month), (today.day)))
+    return ("%d-%02d-%02d" % ((today.year), (today.month), (today.day)))
     
 def insertlogindata(first, last, user, pasd):
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
