@@ -117,7 +117,7 @@ def DepositsView(request):
                     'depositsdata': dbconnect.getdeposits4(user, year, month)}
                     )
             elif 'desc' in request.POST:
-                desc = request.POST['desc']
+                desc = request.POST.getlist('desc')
                 return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
                 'date': date, 'desc': dbconnect.getddescs(user, year, month),
                 'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
@@ -125,7 +125,7 @@ def DepositsView(request):
                 'depositsdata': dbconnect.getdeposits3(user, year, month, desc)}
                 )
             elif 'acc' in request.POST:
-                acc = request.POST['acc']
+                acc = request.POST.getlist('acc')
                 return render(request, 'unbroke/deposits.html', {'name': request.session['name'],
                 'date': date, 'desc': dbconnect.getddescs(user, year, month),
                 'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
@@ -242,7 +242,7 @@ def ExpensesView(request):
                     'expensesdata': dbconnect.getexpenses4(user, year, month)}
                     )
             elif 'desc' in request.POST:
-                desc = request.POST['desc']
+                desc = request.POST.getlist('desc')
                 return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
                 'date': date, 'desc': dbconnect.getedescs(user, year, month),
                 'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
@@ -250,7 +250,7 @@ def ExpensesView(request):
                 'expensesdata': dbconnect.getexpenses3(user, year, month, desc)}
                 )
             elif 'acc' in request.POST:
-                acc = request.POST['acc']
+                acc = request.POST.getlist('acc')
                 return render(request, 'unbroke/expenses.html', {'name': request.session['name'],
                 'date': date, 'desc': dbconnect.getedescs(user, year, month),
                 'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
