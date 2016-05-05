@@ -152,7 +152,7 @@ def getdeposits3(user, year, month, desc):
     for descrip in desc:
         querystring += ' and Description ='
         querystring += descrip   
-    querystring += ' Order by Date Desc;',
+    querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
     for row in query:
         d.append(row)
@@ -167,7 +167,7 @@ def getexpenses3(user, year, month, desc):
     for descrip in desc:
         querystring += ' and Description ='
         querystring += descrip   
-    querystring += ' Order by Date Desc;',
+    querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
     for row in query:
         e.append(row)
