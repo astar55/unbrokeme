@@ -237,13 +237,13 @@ def getdeposits6(user, year, month, desc):
     conn.close()
     return d
     
-def getexpensess6(user, year, month, desc):
+def getexpenses6(user, year, month, desc):
     e = []
     conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
     c = conn.cursor()
     querystring = 'Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
     for descrip in desc:
-        querystring += ' and Account ='
+        querystring += ' and Account ="'
         querystring += descrip + '"'   
     querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
