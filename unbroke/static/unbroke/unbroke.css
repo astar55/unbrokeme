@@ -142,6 +142,10 @@ nav a:hover {
 .data {
     overflow-y: scroll;
     overflow-x: hidden;
+    position: relative;
+    left: 25%;
+    width: 45%;
+    right: 25%;
 }
 
 .data th {
@@ -163,4 +167,17 @@ nav a:hover {
 .notes {
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+
+@media screen and (min-width: 1024px) {
+    .data {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        position: relative;
+        left: 25%;
+        width: 25%;
+        right: 25%;
+    }
+    
 }

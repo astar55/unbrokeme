@@ -76,7 +76,7 @@
             {% csrf_token %} 
             {% for descs in desc %}
                 <input name="desc" type="checkbox" value={{ descs.0 }}> {{descs.0}}<br>
-            {% endfor %}
+            {% endfor %}<br>
             <input type="button" onclick="hideDescOL()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>
@@ -107,7 +107,7 @@
             {% csrf_token %} 
             {% for accs in acc %}
                 <input name="acc" type="checkbox" value={{ accs.0 }}> {{accs.0}}<br>
-            {% endfor %}
+            {% endfor %}<br>
             <input type="button" onclick="hideAccOL()" value="Cancel"> &nbsp;
             <input type="submit" value="Save">
         </form>
