@@ -130,7 +130,7 @@ def DepositsView(request):
                 'date': date, 'desc': dbconnect.getddescs(user, year, month),
                 'autodesc': dbconnect.getautoddesc(), 'autoacc': dbconnect.getautodacc(),
                 'acc': dbconnect.getdaccs(user, year, month), 'total': dbconnect.getdtotal(user, year, month),
-                'depositsdata': dbconnect.getdeposits6(user, year, month, desc)}
+                'depositsdata': dbconnect.getdeposits6(user, year, month, acc)}
                 )
             elif 'ddate' in request.POST:
                 if 'recurring' in request.POST:
@@ -255,7 +255,7 @@ def ExpensesView(request):
                 'date': date, 'desc': dbconnect.getedescs(user, year, month),
                 'autodesc': dbconnect.getautoedesc(), 'autoacc': dbconnect.getautoeacc(),
                 'acc': dbconnect.geteaccs(user, year, month), 'total': dbconnect.getetotal(user, year, month),
-                'expensesdata': dbconnect.getexpenses6(user, year, month, desc)}
+                'expensesdata': dbconnect.getexpenses6(user, year, month, acc)}
                 )
             elif 'ddate' in request.POST:
                 if 'recurring' in request.POST:
