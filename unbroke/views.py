@@ -12,7 +12,7 @@ def IndexView(request):
         if bool(request.POST) == True:
             regfn = request.POST['fname']
             regln = request.POST['lname']
-            regun = request.POST['uname']
+            regun = upper(request.POST['uname'])
             regpw = request.POST['pword']
             try:
                 dbconnect.insertlogindata(regfn, regln, regun, regpw)
@@ -29,7 +29,7 @@ def RegisterView(request):
 def HomeView(request):
     if request.method == 'POST':
         if 'user' in request.POST:
-            loginuser = request.POST['user']
+            loginuser = upper(request.POST['user'])
             loginpass = request.POST['pword']
             if(dbconnect.loginvalid(loginuser, loginpass)):
                 getname = dbconnect.getfname(loginuser)
