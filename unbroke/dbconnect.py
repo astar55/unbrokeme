@@ -21,9 +21,9 @@ def insertlogindata(first, last, user, pasd):
     port=url.port
     )
     c = conn.cursor()
-    pdigest = passhash(pasd)
+    pdigest = str(passhash(pasd))
     id = str(random.random())
-    c.execute('INSERT INTO Users VALUES (%s, %s, %s, %s, %b);',
+    c.execute('INSERT INTO Users VALUES (%s, %s, %s, %s, %s);',
     (id[2:], first, last, user, pdigest))
     conn.commit()
     conn.close()
