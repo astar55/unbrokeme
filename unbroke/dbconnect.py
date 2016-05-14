@@ -1,4 +1,5 @@
-import sqlite3, hashlib, os, random, psycopg2, urlparse
+import sqlite3, hashlib, os, random, psycopg2
+from urllib.parse import urlparse
 from datetime import date, timedelta, datetime
 import calendar
 
