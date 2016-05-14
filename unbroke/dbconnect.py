@@ -41,7 +41,7 @@ def loginvalid(user, pasd):
     u = (user, )
     pdigest = passhash(pasd)
     query = c.execute('Select * from Users where Username=%s;', u )
-    if query.rowcount != 0:
+    if c.rowcount != 0:
         for row in query:
             if pdigest == row[4]:
                 valid = True
