@@ -5,7 +5,7 @@ import calendar
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 urlparse("//postgres")
-url = urlparse.urlparse(os.environ["DATABASE_URL"])
+url = urlparse(os.environ["DATABASE_URL"])
 
 
 def getcurrentdate():
