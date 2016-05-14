@@ -1,30 +1,45 @@
-import sqlite3, hashlib, os, random
+import sqlite3, hashlib, os, random, psycopg2, urlparse
 from datetime import date, timedelta, datetime
 import calendar
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["DATABASE_URL"])
+
 
 def getcurrentdate():
     today = date.today()
     return ("%d-%02d-%02d" % ((today.year), (today.month), (today.day)))
     
 def insertlogindata(first, last, user, pasd):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     pdigest = passhash(pasd)
     id = str(random.random())
-    c.execute('INSERT INTO User VALUES (?, ?, ?, ?, ?);',
+    c.execute('INSERT INTO Users VALUES (?, ?, ?, ?, ?);',
     (id[2:], first, last, user, pdigest))
     conn.commit()
     conn.close()
     
 def loginvalid(user, pasd):
     valid = False
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     u = (user, )
     pdigest = passhash(pasd)
-    query = c.execute('Select * from User where Username=?;', u )
+    query = c.execute('Select * from Users where Username=?;', u )
     if query.rowcount != 0:
         for row in query:
             if pdigest == row[4]:
@@ -33,10 +48,16 @@ def loginvalid(user, pasd):
     return valid
     
 def getfname(user):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     u = (user, )
-    query = c.execute('Select * from User where Username=?;', u )
+    query = c.execute('Select * from Users where Username=?;', u )
     fname = ''
     for row in query:
         fname = row[1]
@@ -51,32 +72,44 @@ def passhash(pasd):
     return pdigest.digest()
     
 def passupdate(user, npass):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     pdigest = passhash(npass)
-    c.execute('Update User Set Password = ? where Username=?;', (pdigest, user))
+    c.execute('Update Users Set Password = ? where Username=?;', (pdigest, user))
     conn.commit()
     conn.close()
     
 def getbudget(user, year, month):
     budget = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select Savings from Savings Inner Join User ON Savings.UserID= User.UserID\
+    query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
      where Username = ? and substr(Date, 4) = ? and substr(Date, 1, 2) = ? Group By Savings.UserID;', (user, year, month))
     for row in query:
         budget.append(row)
     if len(budget) == 0:
         budget.append('0')
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Group By Deposits.UserID;', (user, year, month))
     for row in query:
         budget.append(row)
     while len(budget) < 2:
         budget.append('0')
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Group By Expenses.UserID;', (user, year, month))
     for row in query:
         budget.append(row)
@@ -87,9 +120,15 @@ def getbudget(user, year, month):
     
 def getdeposits(user, year, month):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date;',
     (user, year, month))
     for row in query:
@@ -99,9 +138,15 @@ def getdeposits(user, year, month):
 
 def getexpenses(user, year, month):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date;',
     (user, year, month))
     for row in query:
@@ -111,9 +156,15 @@ def getexpenses(user, year, month):
 
 def getwishlist(user):
     w = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Wishlist Inner Join User ON Wishlist.UserID= User.UserID\
+    query = c.execute('Select * from Wishlist Inner Join Users ON Wishlist.UserID= Users.UserID\
      where Username = ?;', (user,))
     for row in query:
         w.append(row)
@@ -122,9 +173,15 @@ def getwishlist(user):
     
 def getdeposits2(user, year, month):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date Desc;',
     (user, year, month))
     for row in query:
@@ -134,9 +191,15 @@ def getdeposits2(user, year, month):
     
 def getexpenses2(user, year, month):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Date Desc;',
     (user, year, month))
     for row in query:
@@ -146,9 +209,15 @@ def getexpenses2(user, year, month):
 
 def getdeposits3(user, year, month, desc):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    querystring = 'Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
+    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Description ="'
         querystring += descrip + '"'   
@@ -161,9 +230,15 @@ def getdeposits3(user, year, month, desc):
 
 def getexpenses3(user, year, month, desc):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    querystring = 'Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
+    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Description ="'
         querystring += descrip + '"'   
@@ -176,9 +251,15 @@ def getexpenses3(user, year, month, desc):
 
 def getdeposits4(user, year, month):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount;',
     (user, year, month))
     for row in query:
@@ -188,9 +269,15 @@ def getdeposits4(user, year, month):
    
 def getexpenses4(user, year, month):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount;',
     (user, year, month))
     for row in query:
@@ -200,9 +287,15 @@ def getexpenses4(user, year, month):
    
 def getdeposits5(user, year, month):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount Desc;',
     (user, year, month))
     for row in query:
@@ -212,9 +305,15 @@ def getdeposits5(user, year, month):
     
 def getexpenses5(user, year, month):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? Order by Amount Desc;',
     (user, year, month))
     for row in query:
@@ -224,9 +323,15 @@ def getexpenses5(user, year, month):
     
 def getdeposits6(user, year, month, desc):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    querystring = 'Select * from Deposits Inner Join User ON Deposits.UserID= User.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
+    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Account ="'
         querystring += descrip + '"'   
@@ -239,9 +344,15 @@ def getdeposits6(user, year, month, desc):
     
 def getexpenses6(user, year, month, desc):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    querystring = 'Select * from Expenses Inner Join User ON Expenses.UserID= User.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
+    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substr(Date, 1, 4) ="'+year+'" and substr(Date, 6, 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Account ="'
         querystring += descrip + '"'   
@@ -254,9 +365,15 @@ def getexpenses6(user, year, month, desc):
         
 def getddescs(user, year, month):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select distinct Description from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select distinct Description from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -266,9 +383,15 @@ def getddescs(user, year, month):
 
 def getedescs(user, year, month):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select distinct Description from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select distinct Description from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -278,9 +401,15 @@ def getedescs(user, year, month):
 
 def getdaccs(user, year, month):
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select distinct Account from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select distinct Account from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -290,9 +419,15 @@ def getdaccs(user, year, month):
 
 def geteaccs(user, year, month):
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select distinct Account from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select distinct Account from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -302,9 +437,15 @@ def geteaccs(user, year, month):
 
 def getdtotal(user, year, month):
     total = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -314,9 +455,15 @@ def getdtotal(user, year, month):
 
 def getdtotal2(userID, year, month):
     total = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Deposits Inner Join User ON Deposits.UserID= User.UserID\
+    query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Deposits.UserID = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (userID, year, month))
     for row in query:
@@ -326,9 +473,15 @@ def getdtotal2(userID, year, month):
     
 def getetotal(user, year, month):
     total = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -338,9 +491,15 @@ def getetotal(user, year, month):
 
 def getetotal2(userID, year, month):
     total = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Expenses Inner Join User ON Expenses.UserID= User.UserID\
+    query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Expenses.UserID = ? and substr(Date, 1, 4) = ? and substr(Date, 6, 2) = ? ;',
     (userID, year, month))
     for row in query:
@@ -350,9 +509,15 @@ def getetotal2(userID, year, month):
     
 def getsavings(user, year, month):
     total = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select Savings from Savings Inner Join User ON Savings.UserID= User.UserID\
+    query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
      where Username = ? and substr(Date, 4) = ? and substr(Date, 1, 2) = ? ;',
     (user, year, month))
     for row in query:
@@ -362,7 +527,13 @@ def getsavings(user, year, month):
     
 def getautoddesc():
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select distinct Description from Deposits;')
     for row in query:
@@ -372,7 +543,13 @@ def getautoddesc():
 
 def getautoedesc():
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select distinct Description from Expenses;')
     for row in query:
@@ -382,7 +559,13 @@ def getautoedesc():
 
 def getautodacc():
     d = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select distinct Account from Deposits')
     for row in query:
@@ -392,7 +575,13 @@ def getautodacc():
 
 def getautoeacc():
     e = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select distinct Account from Expenses')
     for row in query:
@@ -401,10 +590,16 @@ def getautoeacc():
     return e
 
 def insertdeposit(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     user = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', user)
+    query = c.execute('Select UserID from Users where Username = ?', user)
     for row in query:
         UserId = row  
     c = conn.cursor()
@@ -417,10 +612,16 @@ def insertdeposit(values):
     conn.close()
 
 def insertexpense(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     user = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', user)
+    query = c.execute('Select UserID from Users where Username = ?', user)
     for row in query:
         UserId = row  
     c = conn.cursor()
@@ -433,10 +634,16 @@ def insertexpense(values):
     conn.close()
 
 def insertwish(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     user = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', user)
+    query = c.execute('Select UserID from Users where Username = ?', user)
     for row in query:
         UserId = row
     c = conn.cursor()
@@ -448,10 +655,16 @@ def insertwish(values):
     conn.close()
 
 def insertdeposit2(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     uname = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', uname)
+    query = c.execute('Select UserID from Users where Username = ?', uname)
     for row in query:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
@@ -515,10 +728,16 @@ def insertdeposit2(values):
     conn.close()
  
 def insertexpense2(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     uname = (values[0], )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', uname)
+    query = c.execute('Select UserID from Users where Username = ?', uname)
     for row in query:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
@@ -586,7 +805,13 @@ def upsertsavings2(values, UserId):
     year = values[1][:4]
     month = values[1][5:7]
     date = month+'/'+year
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute("Select SavingsID from Savings where UserID = ? and Date=?", (UserId[0], date))
     for row in query:
@@ -614,7 +839,13 @@ def upsertsavings(values, UserId):
     year = values[1][:4]
     month = values[1][5:7]
     date = month+'/'+year
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute("Select SavingsID from Savings where UserID = ? and Date=?", (UserId[0], date))
     for row in query:
@@ -638,7 +869,13 @@ def upsertsavings(values, UserId):
     conn.close()
 
 def updatedeposit(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     UserId = getuserid(values[6])
     c.execute('Update Deposits SET Date = ?, Description = ?,\
@@ -649,7 +886,13 @@ def updatedeposit(values):
     conn.close()
     
 def updateexpense(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     UserId = getuserid(values[6])
     c.execute('Update Expenses SET Date = ?, Description = ?,\
@@ -661,7 +904,13 @@ def updateexpense(values):
     conn.close()
     
 def updatewish(values):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     c.execute('Update Wishlist SET Wish = ?, Amount = ?,\
     Saved = ?, Remaining = ? where WishlistID = ?;',
@@ -672,7 +921,13 @@ def updatewish(values):
     
 def getdepositsentry(Did):
     entry = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select * from Deposits where DepositID = ?;',
     (Did, ))
@@ -684,7 +939,13 @@ def getdepositsentry(Did):
 
 def getexpensesentry(Eid):
     entry = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     id = (Eid,)
     query = c.execute('Select * from Expenses where ExpensesID = ?;',
@@ -697,7 +958,13 @@ def getexpensesentry(Eid):
 
 def getwishentry(Wid):
     entry = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select * from Wishlist where WishlistID = ?;',
     ((Wid,)))
@@ -710,7 +977,13 @@ def getwishentry(Wid):
 def deletedepositsentry(Did):
     id = Did
     values = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select * from Deposits where DepositID = ?;',
     (id,))
@@ -734,7 +1007,13 @@ def deletedepositsentry(Did):
 def deleteexpensesentry(Eid):
     id = Eid
     values = []
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Select * from Expenses where ExpensesID = ?;',
     (id,))
@@ -756,7 +1035,13 @@ def deleteexpensesentry(Eid):
     conn.close()
 
 def deletewishentry(Wid):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
     query = c.execute('Delete from Wishlist where WishlistID = ?;',
     (Wid,))
@@ -764,9 +1049,15 @@ def deletewishentry(Wid):
     conn.close()
 
 def getuserid(Username):
-    conn = sqlite3.connect(os.path.join(BASE_DIR, 'unbroke\db.sqlite3'))
+    conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+    )
     c = conn.cursor()
-    query = c.execute('Select UserID from User where Username = ?', (Username,))
+    query = c.execute('Select UserID from Users where Username = ?', (Username,))
     for row in query:
         UserId = row  
     return UserId
