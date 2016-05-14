@@ -104,14 +104,14 @@ def getbudget(user, year, month):
         budget.append('0')
     c = conn.cursor()
     query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Group By Deposits.UserID;', (user, year, month))
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Group By Deposits.UserID;', (user, year, month))
     for row in c:
         budget.append(row)
     while len(budget) < 2:
         budget.append('0')
     c = conn.cursor()
     query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Group By Expenses.UserID;', (user, year, month))
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Group By Expenses.UserID;', (user, year, month))
     for row in c:
         budget.append(row)
     while len(budget) < 3:
@@ -130,7 +130,7 @@ def getdeposits(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Date;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Date;',
     (user, year, month))
     for row in c:
         d.append(row)
@@ -148,7 +148,7 @@ def getexpenses(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Date;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Date;',
     (user, year, month))
     for row in c:
         e.append(row)
@@ -183,7 +183,7 @@ def getdeposits2(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Date Desc;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Date Desc;',
     (user, year, month))
     for row in c:
         d.append(row)
@@ -201,7 +201,7 @@ def getexpenses2(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Date Desc;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Date Desc;',
     (user, year, month))
     for row in c:
         e.append(row)
@@ -218,7 +218,7 @@ def getdeposits3(user, year, month, desc):
     port=url.port
     )
     c = conn.cursor()
-    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) ="'+month+'"'
+    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY MM DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY MM DD") from 6 for 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Description ="'
         querystring += descrip + '"'   
@@ -239,7 +239,7 @@ def getexpenses3(user, year, month, desc):
     port=url.port
     )
     c = conn.cursor()
-    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) ="'+month+'"'
+    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY MM DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY MM DD") from 6 for 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Description ="'
         querystring += descrip + '"'   
@@ -261,7 +261,7 @@ def getdeposits4(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Amount;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Amount;',
     (user, year, month))
     for row in c:
         d.append(row)
@@ -279,7 +279,7 @@ def getexpenses4(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Amount;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Amount;',
     (user, year, month))
     for row in c:
         e.append(row)
@@ -297,7 +297,7 @@ def getdeposits5(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Amount Desc;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Amount Desc;',
     (user, year, month))
     for row in c:
         d.append(row)
@@ -315,7 +315,7 @@ def getexpenses5(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s Order by Amount Desc;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s Order by Amount Desc;',
     (user, year, month))
     for row in c:
         e.append(row)
@@ -332,7 +332,7 @@ def getdeposits6(user, year, month, desc):
     port=url.port
     )
     c = conn.cursor()
-    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) ="'+month+'"'
+    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY MM DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY MM DD") from 6 for 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Account ="'
         querystring += descrip + '"'   
@@ -353,7 +353,7 @@ def getexpenses6(user, year, month, desc):
     port=url.port
     )
     c = conn.cursor()
-    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) ="'+month+'"'
+    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, "YYYY MM DD") from 1 for 4) ="'+year+'" and substring(to_char(Date, "YYYY MM DD") from 6 for 2) ="'+month+'"'
     for descrip in desc:
         querystring += ' and Account ="'
         querystring += descrip + '"'   
@@ -375,7 +375,7 @@ def getddescs(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select distinct Description from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (user, year, month))
     for row in c:
         d.append(row)
@@ -393,7 +393,7 @@ def getedescs(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select distinct Description from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (user, year, month))
     for row in c:
         e.append(row)
@@ -411,7 +411,7 @@ def getdaccs(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select distinct Account from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (user, year, month))
     for row in c:
         d.append(row)
@@ -429,7 +429,7 @@ def geteaccs(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select distinct Account from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (user, year, month))
     for row in c:
         e.append(row)
@@ -447,7 +447,7 @@ def getdtotal(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (user, year, month))
     for row in c:
         total.append(row)
@@ -465,7 +465,7 @@ def getdtotal2(userID, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
-     where Deposits.UserID = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Deposits.UserID = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (userID, year, month))
     for row in c:
         total.append(row)
@@ -483,7 +483,7 @@ def getetotal(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Username = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (user, year, month))
     for row in c:
         total.append(row)
@@ -501,7 +501,7 @@ def getetotal2(userID, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
-     where Expenses.UserID = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 6 for 2) = %s ;',
+     where Expenses.UserID = %s and substring(to_char(Date, "YYYY MM DD") from 1 for 4) = %s and substring(to_char(Date, "YYYY MM DD") from 6 for 2) = %s ;',
     (userID, year, month))
     for row in c:
         total.append(row)
