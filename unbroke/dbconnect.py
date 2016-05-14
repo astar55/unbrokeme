@@ -451,8 +451,8 @@ def getdtotal(user, year, month):
     (user, year, month))
     for row in c:
         total.append(row)
-    if total[0] == None:
-        total[0] = 0
+    if total == None:
+        total.append(0)
     conn.close()
     return total[0]
 
@@ -471,8 +471,8 @@ def getdtotal2(userID, year, month):
     (userID, year, month))
     for row in c:
         total.append(row)
-    if total[0] == None:
-        total[0] = 0
+    if total == None:
+        total.append(0)
     conn.close()
     return total[0]
     
@@ -491,8 +491,8 @@ def getetotal(user, year, month):
     (user, year, month))
     for row in c:
         total.append(row)
-    if total[0] == None:
-        total[0] = 0
+    if total == None:
+        total.append(0)
     conn.close()
     return total[0]
 
@@ -511,8 +511,8 @@ def getetotal2(userID, year, month):
     (userID, year, month))
     for row in c:
         total.append(row)
-    if total[0] == None:
-        total[0] = 0
+    if total == None:
+        total.append(0)
     conn.close()
     return total[0]
     
@@ -531,8 +531,8 @@ def getsavings(user, year, month):
     (user, year, month))
     for row in c:
         total.append(row)
-    if total[0] == None:
-        total[0] = 0
+    if total == None:
+        total.append(0)
     conn.close()
     return total
     
