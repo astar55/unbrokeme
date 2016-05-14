@@ -14,11 +14,12 @@ def IndexView(request):
             regln = request.POST['lname']
             regun = request.POST['uname'].upper()
             regpw = request.POST['pword']
-            try:
+            dbconnect.insertlogindata(regfn, regln, regun, regpw)
+            '''try:
                 dbconnect.insertlogindata(regfn, regln, regun, regpw)
             except sqlite3.IntegrityError:
                 messages.add_message(request, messages.INFO, "Email already Registered")
-                return redirect(reverse('unbroke:register'))
+                return redirect(reverse('unbroke:register'))''''
     elif 'loggedin' in request.session:
         return render(request, 'unbroke/home.html', {'name': request.session['name'],})
     return render(request, 'unbroke/index.html', {})
