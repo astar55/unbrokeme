@@ -43,7 +43,7 @@ def loginvalid(user, pasd):
     query = c.execute('Select * from Users where Username=%s;', u )
     if c.rowcount != 0:
         for row in c:
-            if pdigest == row[4]:
+            if pdigest == row[5]:
                 valid = True
     conn.close()
     return valid
