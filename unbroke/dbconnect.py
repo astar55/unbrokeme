@@ -39,7 +39,7 @@ def loginvalid(user, pasd):
     )
     c = conn.cursor()
     u = (user, )
-    pdigest = passhash(pasd)
+    pdigest = str(passhash(pasd))
     query = c.execute('Select * from Users where Username=%s;', u )
     if c.rowcount != 0:
         for row in c:
