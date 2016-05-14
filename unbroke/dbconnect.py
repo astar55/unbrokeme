@@ -103,14 +103,14 @@ def getbudget(user, year, month):
     if len(budget) == 0:
         budget.append('0')
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
+    query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Group By Deposits.UserID;', (user, year, month))
     for row in c:
         budget.append(row)
     while len(budget) < 2:
         budget.append('0')
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
+    query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Group By Expenses.UserID;', (user, year, month))
     for row in c:
         budget.append(row)
@@ -446,7 +446,7 @@ def getdtotal(user, year, month):
     port=url.port
     )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
+    query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
     for row in c:
@@ -464,7 +464,7 @@ def getdtotal2(userID, year, month):
     port=url.port
     )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
+    query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Deposits.UserID = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (userID, year, month))
     for row in c:
@@ -482,7 +482,7 @@ def getetotal(user, year, month):
     port=url.port
     )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
+    query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
     for row in c:
@@ -500,7 +500,7 @@ def getetotal2(userID, year, month):
     port=url.port
     )
     c = conn.cursor()
-    query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
+    query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Expenses.UserID = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (userID, year, month))
     for row in c:
