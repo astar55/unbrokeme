@@ -42,7 +42,7 @@ def loginvalid(user, pasd):
     pdigest = passhash(pasd)
     query = c.execute('Select * from Users where Username=%s;', u )
     if c.rowcount != 0:
-        for row in query:
+        for row in c:
             if pdigest == row[4]:
                 valid = True
     conn.close()
@@ -60,7 +60,7 @@ def getfname(user):
     u = (user, )
     query = c.execute('Select * from Users where Username=%s;', u )
     fname = ''
-    for row in query:
+    for row in c:
         fname = row[1]
     conn.close()
     return fname
@@ -98,21 +98,21 @@ def getbudget(user, year, month):
     c = conn.cursor()
     query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
      where Username = %s and substr(Date, 4) = %s and substr(Date, 1, 2) = %s Group By Savings.UserID;', (user, year, month))
-    for row in query:
+    for row in c:
         budget.append(row)
     if len(budget) == 0:
         budget.append('0')
     c = conn.cursor()
     query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Group By Deposits.UserID;', (user, year, month))
-    for row in query:
+    for row in c:
         budget.append(row)
     while len(budget) < 2:
         budget.append('0')
     c = conn.cursor()
     query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Group By Expenses.UserID;', (user, year, month))
-    for row in query:
+    for row in c:
         budget.append(row)
     while len(budget) < 3:
         budget.append('0')
@@ -132,7 +132,7 @@ def getdeposits(user, year, month):
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Date;',
     (user, year, month))
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -150,7 +150,7 @@ def getexpenses(user, year, month):
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Date;',
     (user, year, month))
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -167,7 +167,7 @@ def getwishlist(user):
     c = conn.cursor()
     query = c.execute('Select * from Wishlist Inner Join Users ON Wishlist.UserID= Users.UserID\
      where Username = %s;', (user,))
-    for row in query:
+    for row in c:
         w.append(row)
     conn.close()
     return w
@@ -185,7 +185,7 @@ def getdeposits2(user, year, month):
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Date Desc;',
     (user, year, month))
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -203,7 +203,7 @@ def getexpenses2(user, year, month):
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Date Desc;',
     (user, year, month))
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -224,7 +224,7 @@ def getdeposits3(user, year, month, desc):
         querystring += descrip + '"'   
     querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -245,7 +245,7 @@ def getexpenses3(user, year, month, desc):
         querystring += descrip + '"'   
     querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -263,7 +263,7 @@ def getdeposits4(user, year, month):
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Amount;',
     (user, year, month))
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -281,7 +281,7 @@ def getexpenses4(user, year, month):
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Amount;',
     (user, year, month))
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -299,7 +299,7 @@ def getdeposits5(user, year, month):
     query = c.execute('Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Amount Desc;',
     (user, year, month))
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -317,7 +317,7 @@ def getexpenses5(user, year, month):
     query = c.execute('Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s Order by Amount Desc;',
     (user, year, month))
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -338,7 +338,7 @@ def getdeposits6(user, year, month, desc):
         querystring += descrip + '"'   
     querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -359,7 +359,7 @@ def getexpenses6(user, year, month, desc):
         querystring += descrip + '"'   
     querystring += ' Order by Date Desc;'
     query = c.execute(querystring)
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -377,7 +377,7 @@ def getddescs(user, year, month):
     query = c.execute('Select distinct Description from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -395,7 +395,7 @@ def getedescs(user, year, month):
     query = c.execute('Select distinct Description from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -413,7 +413,7 @@ def getdaccs(user, year, month):
     query = c.execute('Select distinct Account from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -431,7 +431,7 @@ def geteaccs(user, year, month):
     query = c.execute('Select distinct Account from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -449,7 +449,7 @@ def getdtotal(user, year, month):
     query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         total.append(row)
     conn.close()
     return total[0]
@@ -467,7 +467,7 @@ def getdtotal2(userID, year, month):
     query = c.execute('Select total(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Deposits.UserID = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (userID, year, month))
-    for row in query:
+    for row in c:
         total.append(row)
     conn.close()
     return total[0]
@@ -485,7 +485,7 @@ def getetotal(user, year, month):
     query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         total.append(row)
     conn.close()
     return total[0]
@@ -503,7 +503,7 @@ def getetotal2(userID, year, month):
     query = c.execute('Select total(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Expenses.UserID = %s and substr(Date, 1, 4) = %s and substr(Date, 6, 2) = %s ;',
     (userID, year, month))
-    for row in query:
+    for row in c:
         total.append(row)
     conn.close()
     return total[0]
@@ -521,7 +521,7 @@ def getsavings(user, year, month):
     query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
      where Username = %s and substr(Date, 4) = %s and substr(Date, 1, 2) = %s ;',
     (user, year, month))
-    for row in query:
+    for row in c:
         total.append(row)
     conn.close()
     return total
@@ -537,7 +537,7 @@ def getautoddesc():
     )
     c = conn.cursor()
     query = c.execute('Select distinct Description from Deposits;')
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -553,7 +553,7 @@ def getautoedesc():
     )
     c = conn.cursor()
     query = c.execute('Select distinct Description from Expenses;')
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -569,7 +569,7 @@ def getautodacc():
     )
     c = conn.cursor()
     query = c.execute('Select distinct Account from Deposits')
-    for row in query:
+    for row in c:
         d.append(row)
     conn.close()
     return d
@@ -585,7 +585,7 @@ def getautoeacc():
     )
     c = conn.cursor()
     query = c.execute('Select distinct Account from Expenses')
-    for row in query:
+    for row in c:
         e.append(row)
     conn.close()
     return e
@@ -601,7 +601,7 @@ def insertdeposit(values):
     user = (values[0], )
     c = conn.cursor()
     query = c.execute('Select UserID from Users where Username = %s', user)
-    for row in query:
+    for row in c:
         UserId = row  
     c = conn.cursor()
     id = str(random.random())
@@ -623,7 +623,7 @@ def insertexpense(values):
     user = (values[0], )
     c = conn.cursor()
     query = c.execute('Select UserID from Users where Username = %s', user)
-    for row in query:
+    for row in c:
         UserId = row  
     c = conn.cursor()
     id = str(random.random())
@@ -645,7 +645,7 @@ def insertwish(values):
     user = (values[0], )
     c = conn.cursor()
     query = c.execute('Select UserID from Users where Username = %s', user)
-    for row in query:
+    for row in c:
         UserId = row
     c = conn.cursor()
     id = str(random.random())
@@ -666,7 +666,7 @@ def insertdeposit2(values):
     uname = (values[0], )
     c = conn.cursor()
     query = c.execute('Select UserID from Users where Username = %s', uname)
-    for row in query:
+    for row in c:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
     repeat = timedelta(1);
@@ -739,7 +739,7 @@ def insertexpense2(values):
     uname = (values[0], )
     c = conn.cursor()
     query = c.execute('Select UserID from Users where Username = %s', uname)
-    for row in query:
+    for row in c:
         UserId = row  
     date = datetime.strptime(values[1], '%Y-%m-%d').date()
     repeat = timedelta(1);
@@ -815,7 +815,7 @@ def upsertsavings2(values, UserId):
     )
     c = conn.cursor()
     query = c.execute("Select SavingsID from Savings where UserID = %s and Date=%s", (UserId[0], date))
-    for row in query:
+    for row in c:
         SavingsId = row
     if SavingsId[0] == None:
         id = str(random.random())
@@ -849,7 +849,7 @@ def upsertsavings(values, UserId):
     )
     c = conn.cursor()
     query = c.execute("Select SavingsID from Savings where UserID = %s and Date=%s", (UserId[0], date))
-    for row in query:
+    for row in c:
         SavingsId = row
     if SavingsId[0] == None:
         id = str(random.random())
@@ -932,7 +932,7 @@ def getdepositsentry(Did):
     c = conn.cursor()
     query = c.execute('Select * from Deposits where DepositID = %s;',
     (Did, ))
-    for row in query:
+    for row in c:
         for i in row:
             entry.append(i)
     conn.close()
@@ -951,7 +951,7 @@ def getexpensesentry(Eid):
     id = (Eid,)
     query = c.execute('Select * from Expenses where ExpensesID = %s;',
     id)
-    for row in query:
+    for row in c:
         for i in row:
             entry.append(i)
     conn.close()
@@ -969,7 +969,7 @@ def getwishentry(Wid):
     c = conn.cursor()
     query = c.execute('Select * from Wishlist where WishlistID = %s;',
     ((Wid,)))
-    for row in query:
+    for row in c:
         for i in row:
             entry.append(i)
     conn.close()
@@ -988,7 +988,7 @@ def deletedepositsentry(Did):
     c = conn.cursor()
     query = c.execute('Select * from Deposits where DepositID = %s;',
     (id,))
-    for row in query:
+    for row in c:
         for i in row:
             values.append(i)
     c = conn.cursor()
@@ -1018,7 +1018,7 @@ def deleteexpensesentry(Eid):
     c = conn.cursor()
     query = c.execute('Select * from Expenses where ExpensesID = %s;',
     (id,))
-    for row in query:
+    for row in c:
         for i in row:
             values.append(i)
     c = conn.cursor()
@@ -1059,6 +1059,6 @@ def getuserid(Username):
     )
     c = conn.cursor()
     query = c.execute('Select UserID from Users where Username = %s', (Username,))
-    for row in query:
+    for row in c:
         UserId = row  
     return UserId
