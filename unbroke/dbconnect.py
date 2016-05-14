@@ -97,7 +97,7 @@ def getbudget(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
-     where Username = %s and substr(Date, 4) = %s and substr(Date, 1, 2) = %s Group By Savings.UserID;', (user, year, month))
+     where Username = %s and substr(Date, 4) = %s and substr(Date, 1, 2) = %s Group By Savings.UserID, Savings.Savings;', (user, year, month))
     for row in c:
         budget.append(row)
     if len(budget) == 0:
