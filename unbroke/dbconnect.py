@@ -471,8 +471,8 @@ def getdtotal2(userID, year, month):
     (userID, year, month))
     for row in c:
         total.append(row)
-    if total[0] = None:
-        total[0] == 0
+    if total[0] == None:
+        total[0] = 0
     conn.close()
     return total[0]
     
