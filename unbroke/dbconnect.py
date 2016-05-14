@@ -4,7 +4,7 @@ from datetime import date, timedelta, datetime
 import calendar
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-urlparse.uses_netloc.append("postgres")
+urlparse("//postgres")
 url = urlparse.urlparse(os.environ["DATABASE_URL"])
 
 
