@@ -97,7 +97,7 @@ def getbudget(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
-     where Username = %s and substring(to_char(Date, "YYYY-MM-DD") from 4 for 4) = %s and substring(to_char(Date, "YYYY-MM-DD") from 1 for 2) = %s Group By Savings.UserID, Savings.Savings;', (user, year, month))
+     where Username = %s and substring(Date from 4 for 4) = %s and substring(Date from 1 for 2) = %s Group By Savings.UserID, Savings.Savings;', (user, year, month))
     for row in c:
         budget.append(row)
     if len(budget) == 0:
@@ -519,7 +519,7 @@ def getsavings(user, year, month):
     )
     c = conn.cursor()
     query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
-     where Username = %s and substr(to_char(Date, "YYYY-MM-DD"), 4) = %s and substr(to_char(Date, "YYYY-MM-DD"), 1, 2) = %s ;',
+     where Username = %s and substr(Date from 4 for 4) = %s and substr(Date from 1 for 2) = %s ;',
     (user, year, month))
     for row in c:
         total.append(row)
