@@ -1,1 +1,1 @@
-web: gunicorn unbrokeme.wsgi.application --log-file -
+web: gunicorn unbrokeme.wsgi --log-file -
