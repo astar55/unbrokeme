@@ -23,7 +23,7 @@ def insertlogindata(first, last, user, pasd):
     c = conn.cursor()
     pdigest = passhash(pasd)
     id = str(random.random())
-    c.execute('INSERT INTO Users VALUES (%s, %s, %s, %s, %s);',
+    c.execute('INSERT INTO Users VALUES (%s, %s, %s, %s, %b);',
     (id[2:], first, last, user, pdigest))
     conn.commit()
     conn.close()
