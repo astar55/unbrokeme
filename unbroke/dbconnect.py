@@ -454,7 +454,7 @@ def getdtotal(user, year, month):
     except ProgrammingError:
         total.append((0,))
     if total[0] == None:
-        total.append((0,))
+        total[0] =(0,)
     conn.close()
     return total[0]
 
@@ -476,7 +476,7 @@ def getdtotal2(userID, year, month):
     except ProgrammingError:
         total.append((0,))
     if total[0] == None:
-        total.append((0,))
+        total[0] =(0,)
     conn.close()
     return total[0]
     
@@ -498,7 +498,7 @@ def getetotal(user, year, month):
     except ProgrammingError:
         total.append((0,))
     if total[0] == None:
-        total.append((0,))
+        total[0] =(0,)
     conn.close()
     return total[0]
 
@@ -520,7 +520,7 @@ def getetotal2(userID, year, month):
     except ProgrammingError:
         total.append((0,))
     if total[0] == None:
-        total.append((0,))
+        total[0] =(0,)
     conn.close()
     return total[0]
     
@@ -542,7 +542,7 @@ def getsavings(user, year, month):
     except ProgrammingError:
         total.append((0,))
     if total[0] == None:
-        total.append((0,))
+        total[0] =(0,)
     conn.close()
     return total
     
@@ -956,6 +956,8 @@ def getdepositsentry(Did):
         for i in row:
             entry.append(i)
     conn.close()
+    entry[1] = datetime.strptime(entry[1], '%B %d, %Y')
+    entry[1] = ("%d-%02d-%02d") % ((entry[1].year), (entry[1].month), (entry[1].day))
     return entry[1], entry[2], entry[3], entry[4], entry[6]
 
 def getexpensesentry(Eid):
@@ -975,6 +977,8 @@ def getexpensesentry(Eid):
         for i in row:
             entry.append(i)
     conn.close()
+    entry[1] = datetime.strptime(entry[1], '%B %d, %Y')
+    entry[1] = ("%d-%02d-%02d") % ((entry[1].year), (entry[1].month), (entry[1].day))
     return entry[1], entry[2], entry[3], entry[4], entry[6]
 
 def getwishentry(Wid):
