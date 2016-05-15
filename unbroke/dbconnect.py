@@ -453,7 +453,7 @@ def getdtotal(user, year, month):
         total.append(c.fetchone())
     except ProgrammingError:
         total.append((0,))
-    if total[1] == None:
+    if total[0][0] == None:
         total[0] =(0,)
     conn.close()
     return total[0]
@@ -475,7 +475,7 @@ def getdtotal2(userID, year, month):
         total.append(c.fetchone())
     except ProgrammingError:
         total.append((0,))
-    if total[0] == None:
+    if total[0][0] == None:
         total[0] =(0,)
     conn.close()
     return total[0]
@@ -497,7 +497,7 @@ def getetotal(user, year, month):
         total.append(c.fetchone())
     except ProgrammingError:
         total.append((0,))
-    if total[0] == None:
+    if total[0][0] == None:
         total[0] =(0,)
     conn.close()
     return total[0]
@@ -519,7 +519,7 @@ def getetotal2(userID, year, month):
         total.append(c.fetchone())
     except ProgrammingError:
         total.append((0,))
-    if total[0] == None:
+    if total[0][0] == None:
         total[0] =(0,)
     conn.close()
     return total[0]
