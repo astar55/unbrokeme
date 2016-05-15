@@ -449,9 +449,9 @@ def getdtotal(user, year, month):
     query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Username = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) = %s ;',
     (user, year, month))
-    for row in c:
-        total.append(row)
-    if total == None:
+    try:
+        total.append(c.fetchone())
+    except ProgrammingError:
         total.append(0)
     conn.close()
     return total[0]
@@ -469,9 +469,9 @@ def getdtotal2(userID, year, month):
     query = c.execute('Select sum(Amount) from Deposits Inner Join Users ON Deposits.UserID= Users.UserID\
      where Deposits.UserID = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) = %s ;',
     (userID, year, month))
-    for row in c:
-        total.append(row)
-    if total == None:
+    try:
+        total.append(c.fetchone())
+    except ProgrammingError:
         total.append(0)
     conn.close()
     return total[0]
@@ -489,9 +489,9 @@ def getetotal(user, year, month):
     query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Username = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) = %s ;',
     (user, year, month))
-    for row in c:
-        total.append(row)
-    if total == None:
+    try:
+        total.append(c.fetchone())
+    except ProgrammingError:
         total.append(0)
     conn.close()
     return total[0]
@@ -509,9 +509,9 @@ def getetotal2(userID, year, month):
     query = c.execute('Select sum(Amount) from Expenses Inner Join Users ON Expenses.UserID= Users.UserID\
      where Expenses.UserID = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) = %s and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) = %s ;',
     (userID, year, month))
-    for row in c:
-        total.append(row)
-    if total == None:
+    try:
+        total.append(c.fetchone())
+    except ProgrammingError:
         total.append(0)
     conn.close()
     return total[0]
@@ -529,9 +529,9 @@ def getsavings(user, year, month):
     query = c.execute('Select Savings from Savings Inner Join Users ON Savings.UserID= Users.UserID\
      where Username = %s and substring(Date from 4 for 4) = %s and substring(Date from 1 for 2) = %s ;',
     (user, year, month))
-    for row in c:
-        total.append(row)
-    if total == None:
+    try:
+        total.append(c.fetchone())
+    except ProgrammingError:
         total.append(0)
     conn.close()
     return total
