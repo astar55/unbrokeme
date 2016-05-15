@@ -453,9 +453,8 @@ def getdtotal(user, year, month):
         total.append(c.fetchone())
     except ProgrammingError:
         total.append((0,))
-    if total[0] == None:
+    if total[1] == None:
         total[0] =(0,)
-            sfdsadf
     conn.close()
     return total[0]
 
