@@ -218,7 +218,7 @@ def getdeposits3(user, year, month, desc):
     port=url.port
     )
     c = conn.cursor()
-    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) ="'+year+'" and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) ="'+month+'"'
+    querystring = 'Select * from Deposits Inner Join Users ON Deposits.UserID= Users.UserID where Username =\''+user+'\' and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) =\''+year+'\' and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) =\''+month+'\''
     for descrip in desc:
         querystring += ' and Description ="'
         querystring += descrip + '"'   
@@ -239,7 +239,7 @@ def getexpenses3(user, year, month, desc):
     port=url.port
     )
     c = conn.cursor()
-    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username ="'+user+'" and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) ="'+year+'" and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) ="'+month+'"'
+    querystring = 'Select * from Expenses Inner Join Users ON Expenses.UserID= Users.UserID where Username =\''+user+'\' and substring(to_char(Date, \'YYYY-MM-DD\') from 1 for 4) =\''+year+'\' and substring(to_char(Date, \'YYYY-MM-DD\') from 6 for 2) =\''+month+'\''
     for descrip in desc:
         querystring += ' and Description ="'
         querystring += descrip + '"'   
