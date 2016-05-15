@@ -977,7 +977,6 @@ def getexpensesentry(Eid):
         for i in row:
             entry.append(i)
     conn.close()
-    entry[1] = datetime.strptime(entry[1], '%B %d, %Y')
     entry[1] = ("%d-%02d-%02d") % ((entry[1].year), (entry[1].month), (entry[1].day))
     return entry[1], entry[2], entry[3], entry[4], entry[6]
 
