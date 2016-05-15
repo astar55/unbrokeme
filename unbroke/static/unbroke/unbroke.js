@@ -157,7 +157,7 @@ function adddesc(){
     var z = document.createElement("option")
     z.text = x
     z.value = x
-    y.add(z)
+    y.add(z, y[0])
     hideadddesc()
 }
 
@@ -167,7 +167,7 @@ function addacc(){
     var z = document.createElement("option")
     z.text = x
     z.value = x
-    y.add(z)
+    y.add(z, y[0])
     hideaddacc()
 }
 
