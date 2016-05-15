@@ -452,7 +452,9 @@ def getdtotal(user, year, month):
     try:
         total.append(c.fetchone())
     except ProgrammingError:
-        total.append(0)
+        total.append((0,))
+    if total[0][0] = None:
+        total.append((0,))
     conn.close()
     return total[0]
 
@@ -472,7 +474,9 @@ def getdtotal2(userID, year, month):
     try:
         total.append(c.fetchone())
     except ProgrammingError:
-        total.append(0)
+        total.append((0,))
+    if total[0][0] = None:
+        total.append((0,))
     conn.close()
     return total[0]
     
@@ -492,7 +496,9 @@ def getetotal(user, year, month):
     try:
         total.append(c.fetchone())
     except ProgrammingError:
-        total.append(0)
+        total.append((0,))
+    if total[0][0] = None:
+        total.append((0,))
     conn.close()
     return total[0]
 
@@ -512,7 +518,9 @@ def getetotal2(userID, year, month):
     try:
         total.append(c.fetchone())
     except ProgrammingError:
-        total.append(0)
+        total.append((0,))
+    if total[0][0] = None:
+        total.append((0,))
     conn.close()
     return total[0]
     
@@ -532,7 +540,9 @@ def getsavings(user, year, month):
     try:
         total.append(c.fetchone())
     except ProgrammingError:
-        total.append(0)
+        total.append((0,))
+    if total[0][0] = None:
+        total.append((0,))
     conn.close()
     return total
     
